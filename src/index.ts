@@ -13,12 +13,17 @@ const install: any = (Vue: any, options: any) => {
 
 export default { install };
 const plugin = {
+<<<<<<< HEAD
 	install,
+=======
+  install
+>>>>>>> upstream/master
 };
 
 // Auto-install when vue is found (eg. in browser via <script> tag)
 let GlobalVue = null;
 if (typeof window !== 'undefined') {
+<<<<<<< HEAD
 	GlobalVue = window.Vue;
 } else if (typeof global !== 'undefined') {
 	GlobalVue = global.Vue;
@@ -26,3 +31,12 @@ if (typeof window !== 'undefined') {
 if (GlobalVue) {
 	GlobalVue.use(plugin);
 }
+=======
+  GlobalVue = window.Vue;
+} else if (typeof global !== 'undefined') {
+  GlobalVue = global.Vue;
+}
+if (GlobalVue) {
+  GlobalVue.use(plugin);
+}
+>>>>>>> upstream/master

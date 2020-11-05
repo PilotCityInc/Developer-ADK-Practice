@@ -87,4 +87,10 @@ docker-compose run microapp yarn test:unit
 docker-compose run microapp yarn lint
 ```
 ## Docker Resources
+<<<<<<< HEAD
 https://www.thebyte.io/offers/wqnqeqQm/checkout
+=======
+https://www.thebyte.io/offers/wqnqeqQm/checkout
+
+### signed by akheel
+>>>>>>> upstream/master

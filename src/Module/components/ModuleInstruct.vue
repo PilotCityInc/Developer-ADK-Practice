@@ -3,16 +3,33 @@
   <v-container class="module-instruct">
     <div class="module-instruct__container">
       <div class="module-instruct__description">
+<<<<<<< HEAD
         <div
           class="module-instruct__description-label font-weight-black text-subtitle-2 text-uppercase"
         >
           <span>Instructions</span>
         </div>
         <div :contenteditable="!readonly" class="font-weight-black text-body-1">
+=======
+        <div class="module-instruct__description-label">
+          <span>Goal</span>
+        </div>
+        <div
+          :contenteditable="!readonly"
+          class="font-weight-black text-body-1"
+          @input="updateDesc($event)"
+        >
+>>>>>>> upstream/master
           {{ description }}
         </div>
       </div>
       <div class="module-instruct__instructions">
+<<<<<<< HEAD
+=======
+        <div class="module-instruct__description-label">
+          <span>Instructions</span>
+        </div>
+>>>>>>> upstream/master
         <div
           v-for="(item, index) in instructions"
           :key="item + index"
@@ -34,7 +51,10 @@
         <div
           v-if="!readonly"
           class="module-instruct__instructions-add font-weight-black text-body-1"
+<<<<<<< HEAD
           @click="instructions = ''"
+=======
+>>>>>>> upstream/master
         >
           <v-icon class="module-instruct__instructions-add-icon"> mdi-plus </v-icon>
         </div>
@@ -46,12 +66,29 @@
 <script lang="ts">
 import {
   computed,
+<<<<<<< HEAD
   defineComponent,
   reactive,
   toRefs,
   WritableComputedRef
 } from '@vue/composition-api';
 
+=======
+  reactive,
+  WritableComputedRef,
+  toRefs,
+  defineComponent
+} from '@vue/composition-api';
+
+interface Val {
+  description: string;
+  instructions: string[];
+}
+interface Update {
+  updateDesc: (e: Event) => void;
+  updateInstruction: (e: Event) => void;
+}
+>>>>>>> upstream/master
 export default defineComponent({
   name: 'ModuleInstruct',
   model: {
@@ -76,6 +113,7 @@ export default defineComponent({
   apollo: {},
   setup(props, { emit }) {
     const description: WritableComputedRef<string> = computed({
+<<<<<<< HEAD
       get: () => props.value.description,
       set: newVal => emit('input', newVal)
     });
@@ -84,6 +122,16 @@ export default defineComponent({
       set: newVal => emit('input', instructions.value.concat(newVal))
     });
     const updateData = reactive({
+=======
+      get: () => (props.value as Val).description,
+      set: newVal => emit('input', newVal)
+    });
+    const instructions: WritableComputedRef<string[]> = computed({
+      get: () => (props.value as Val).instructions,
+      set: newVal => emit('input', instructions.value.concat(newVal))
+    });
+    const updateData: Update = reactive({
+>>>>>>> upstream/master
       updateDesc: (e: Event) => {
         const target = e.target as HTMLElement;
         description.value = target.innerText;
@@ -101,3 +149,8 @@ export default defineComponent({
   }
 });
 </script>
+<<<<<<< HEAD
+=======
+
+<style lang="scss"></style>
+>>>>>>> upstream/master

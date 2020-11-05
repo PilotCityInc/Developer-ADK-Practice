@@ -46,7 +46,11 @@
     <div class="module__container" :style="{ 'border-color': getColor }">
       <div class="module__title">
         <div class="module__image rounded-circle">
+<<<<<<< HEAD
           <v-icon light x-large :color="selectedColor">mdi-cog</v-icon>
+=======
+          <v-icon light x-large :color="selectedColor">mdi-newspaper-variant-outline</v-icon>
+>>>>>>> upstream/master
         </div>
         <div class="module__header text-md-h5 text-sm-subtitle-1 d-flex align-center">
           <input :value="moduleName" type="text" class="module__header-text" />
@@ -60,7 +64,11 @@
         </div>
       </div>
       <div class="module__body">
+<<<<<<< HEAD
         <v-progress-linear color="#3c9dcd" height="2" value="75" buffer-value="95" stream />
+=======
+        <v-progress-linear color="#dedede" height="2" value="100" buffer-value="100" stream />
+>>>>>>> upstream/master
         <div class="module__pagination">
           <div v-for="page in subpages" :key="page" :class="{ active: currentPage == page }">
             <div class="module__pagination-button--active" />
@@ -86,12 +94,21 @@
   </v-container>
 </template>
 <style lang="scss">
+<<<<<<< HEAD
 html,
 body {
   font-family: 'Raleway';
   font-size: 16px;
   width: 100%;
   height: 100%;
+=======
+.module {
+  // background-color: #404142;
+
+  &__body {
+    // margin-top: 0px;
+  }
+>>>>>>> upstream/master
 }
 .module__menu {
   .v-color-picker {
@@ -102,7 +119,11 @@ body {
 }
 </style>
 <script lang="ts">
+<<<<<<< HEAD
 import { computed, defineComponent, reactive, ref, toRefs } from '@vue/composition-api';
+=======
+import { computed, reactive, ref, toRefs } from '@vue/composition-api';
+>>>>>>> upstream/master
 import '@/styles/module.scss';
 import * as Module from './components';
 
@@ -117,8 +138,23 @@ interface Color {
   selectedColor: string;
   getColor: string;
 }
+<<<<<<< HEAD
 export default defineComponent({
   name: 'Microapp',
+=======
+interface Config {
+  description: string;
+  instruct: string[];
+  deletable: boolean;
+  group: string[];
+  deliverable: boolean;
+  notifications: string;
+  reflection: string[];
+  access: string;
+}
+export default {
+  name: 'ModuleName',
+>>>>>>> upstream/master
   components: {
     'module-monitor': Module.Monitor,
     'module-setup': Module.Setup,
@@ -126,7 +162,12 @@ export default defineComponent({
     'module-preview': Module.Default
   },
   setup() {
+<<<<<<< HEAD
     const moduleName = ref('Module Name');
+=======
+    const moduleName = ref('Request for Projects');
+    console.log(this); // maybe we can use exported `name:` property
+>>>>>>> upstream/master
     const page: Page = reactive({
       subpages: ['Setup', 'Presets', 'Monitor'],
       currentPage: 'Setup',
@@ -141,18 +182,37 @@ export default defineComponent({
         ['#eda1bf', '#fec34b', '#bdbdbd'],
         ['#ae90b0', '#f79961', '#000000']
       ],
+<<<<<<< HEAD
       selectedColor: '#bdbdbd',
+=======
+      selectedColor: '#3c9dcd',
+>>>>>>> upstream/master
       getColor: computed(() => {
         return color.selectedColor.substring(0, 7);
       })
     });
+<<<<<<< HEAD
+=======
+    const config = ref({
+      description: '',
+      instruct: ['']
+    });
+>>>>>>> upstream/master
     const menu = ref(false);
     return {
       ...toRefs(color as any),
       ...toRefs(page as any),
+<<<<<<< HEAD
+=======
+      config,
+>>>>>>> upstream/master
       moduleName,
       menu
     };
   }
+<<<<<<< HEAD
 });
+=======
+};
+>>>>>>> upstream/master
 </script>
