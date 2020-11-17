@@ -90,7 +90,7 @@
 
       <template>
         <v-timeline>
-          <v-timeline-item v-for="n in 1" :key="n" color="green" fill-dot left large>
+          <v-timeline-item color="green" fill-dot left large>
             <template v-slot:icon>
               <v-avatar>
                 <img
@@ -112,7 +112,7 @@
             </v-card>
           </v-timeline-item>
 
-          <v-timeline-item v-for="n in 1" :key="n" color="green" fill-dot right large>
+          <v-timeline-item color="green" fill-dot right large>
             <template v-slot:icon>
               <v-avatar>
                 <img
@@ -133,7 +133,7 @@
             </v-card>
           </v-timeline-item>
 
-          <v-timeline-item v-for="n in 1" :key="n" right color="red" fill-dot large>
+          <v-timeline-item right color="red" fill-dot large>
             <template v-slot:icon>
               <v-avatar>
                 <img
@@ -156,7 +156,7 @@
             </v-card>
           </v-timeline-item>
 
-          <v-timeline-item v-for="n in 1" :key="n" right color="pink" fill-dot large>
+          <v-timeline-item right color="pink" fill-dot large>
             <template v-slot:icon>
               <v-avatar>
                 <img
@@ -178,7 +178,7 @@
             </v-card>
           </v-timeline-item>
 
-          <v-timeline-item v-for="n in 1" :key="n" right color="purple" fill-dot large>
+          <v-timeline-item right color="purple" fill-dot large>
             <template v-slot:icon>
               <v-avatar>
                 <img
@@ -199,7 +199,7 @@
             </v-card>
           </v-timeline-item>
 
-          <v-timeline-item v-for="n in 1" :key="n" right color="green" fill-dot large>
+          <v-timeline-item right color="green" fill-dot large>
             <template v-slot:icon>
               <v-avatar>
                 <img

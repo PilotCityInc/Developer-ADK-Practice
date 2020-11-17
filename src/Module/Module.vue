@@ -14,7 +14,7 @@
         @click="currentPage = 'preview'"
         >Preview</v-btn
       >
-      <v-menu v-model="menu" left :close-on-content-click="false" offset-y>
+      <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
           <v-btn v-bind="attrs" small icon class="module__navbar-button" v-on="on">
             <v-icon color="grey lighten-1">mdi-cog</v-icon></v-btn
@@ -46,11 +46,7 @@
     <div class="module__container" :style="{ 'border-color': getColor }">
       <div class="module__title">
         <div class="module__image rounded-circle">
-<<<<<<< HEAD
-          <v-icon light x-large :color="selectedColor">mdi-cog</v-icon>
-=======
           <v-icon light x-large :color="selectedColor">mdi-newspaper-variant-outline</v-icon>
->>>>>>> upstream/master
         </div>
         <div class="module__header text-md-h5 text-sm-subtitle-1 d-flex align-center">
           <input :value="moduleName" type="text" class="module__header-text" />
@@ -68,8 +64,12 @@
         <v-progress-linear color="#3c9dcd" height="2" value="75" buffer-value="95" stream />
 =======
         <v-progress-linear color="#dedede" height="2" value="100" buffer-value="100" stream />
+<<<<<<< HEAD
 >>>>>>> upstream/master
         <div class="module__pagination">
+=======
+        <div v-if="currentPage != 'preview'" class="module__pagination">
+>>>>>>> upstream/master
           <div v-for="page in subpages" :key="page" :class="{ active: currentPage == page }">
             <div class="module__pagination-button--active" />
             <v-btn
@@ -97,8 +97,14 @@
 <style lang="scss">
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> aeaf0445cf37cbebce46cacc17de2737f118b64e
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> upstream/master
+>>>>>>> 43bc49e1b94b0d0e8a67012186c38d65e74ab934
 html,
 body {
   font-family: 'Raleway';
@@ -106,16 +112,26 @@ body {
   width: 100%;
   height: 100%;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+=======
+>>>>>>> 43bc49e1b94b0d0e8a67012186c38d65e74ab934
 .module {
   // background-color: #404142;
 
   &__body {
     // margin-top: 0px;
   }
+<<<<<<< HEAD
 >>>>>>> upstream/master
 =======
 >>>>>>> aeaf0445cf37cbebce46cacc17de2737f118b64e
+=======
+>>>>>>> upstream/master
+=======
+>>>>>>> upstream/master
+>>>>>>> 43bc49e1b94b0d0e8a67012186c38d65e74ab934
 }
 .module__menu {
   .v-color-picker {
@@ -134,6 +150,7 @@ import { computed, reactive, ref, toRefs } from '@vue/composition-api';
 import '@/styles/module.scss';
 import * as Module from './components';
 
+<<<<<<< HEAD
 interface Page {
   subpages: string[];
   currentPage: string;
@@ -159,6 +176,8 @@ interface Config {
   reflection: string[];
   access: string;
 }
+=======
+>>>>>>> upstream/master
 export default {
   name: 'ModuleName',
 >>>>>>> upstream/master
@@ -173,22 +192,26 @@ export default {
     const moduleName = ref('Module Name');
 =======
     const moduleName = ref('Request for Projects');
+<<<<<<< HEAD
     console.log(this); // maybe we can use exported `name:` property
 >>>>>>> upstream/master
     const page: Page = reactive({
+=======
+    const page = reactive({
+>>>>>>> upstream/master
       subpages: ['Setup', 'Presets', 'Monitor'],
-      currentPage: 'Setup',
-      preview: false,
-      getComponent: computed(() => {
-        return `module-${page.currentPage.toLowerCase()}`;
-      })
+      currentPage: 'Setup'
     });
-    const color: Color = reactive({
+    const getComponent = computed(() => {
+      return `module-${page.currentPage.toLowerCase()}`;
+    });
+    const color = reactive({
       pilotcityColors: [
         ['#6eba80', '#3c9dcd', '#ea6764'],
         ['#eda1bf', '#fec34b', '#bdbdbd'],
         ['#ae90b0', '#f79961', '#000000']
       ],
+<<<<<<< HEAD
 <<<<<<< HEAD
       selectedColor: '#bdbdbd',
 =======
@@ -197,6 +220,12 @@ export default {
       getColor: computed(() => {
         return color.selectedColor.substring(0, 7);
       })
+=======
+      selectedColor: '#3c9dcd'
+    });
+    const getColor = computed(() => {
+      return color.selectedColor.substring(0, 7);
+>>>>>>> upstream/master
     });
 <<<<<<< HEAD
 =======
@@ -214,7 +243,9 @@ export default {
       config,
 >>>>>>> upstream/master
       moduleName,
-      menu
+      menu,
+      getComponent,
+      getColor
     };
   }
 <<<<<<< HEAD
