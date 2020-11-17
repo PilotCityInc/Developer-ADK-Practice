@@ -74,8 +74,9 @@
             <div class="module__pagination-button--active" />
             <v-btn
               :ripple="false"
-              class="module__pagination-button elevation-0"
-              color="transparent"
+              class="module__pagination-button"
+              elevation="0"
+              color="#ffffff"
               height="40"
               small
               @click="currentPage = page"
@@ -95,12 +96,16 @@
 </template>
 <style lang="scss">
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> aeaf0445cf37cbebce46cacc17de2737f118b64e
 html,
 body {
   font-family: 'Raleway';
   font-size: 16px;
   width: 100%;
   height: 100%;
+<<<<<<< HEAD
 =======
 .module {
   // background-color: #404142;
@@ -109,6 +114,8 @@ body {
     // margin-top: 0px;
   }
 >>>>>>> upstream/master
+=======
+>>>>>>> aeaf0445cf37cbebce46cacc17de2737f118b64e
 }
 .module__menu {
   .v-color-picker {
