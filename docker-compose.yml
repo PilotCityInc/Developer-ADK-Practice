@@ -3,17 +3,9 @@ networks:
   pdk:
     driver: bridge
 services:
-<<<<<<< HEAD
   practice: #in container-based development
-    container_name: practice
-    build: 
-      context: .
-      dockerfile: client.dockerfile 
-=======
-  microapp: #in container-based development
     image: pilotcity/boiler
-    container_name: microapp
->>>>>>> 43bc49e1b94b0d0e8a67012186c38d65e74ab934
+    container_name: practice
     environment:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
@@ -24,7 +16,7 @@ services:
       - ./:/usr/src/app
       - usr/src/app/node_modules
     ports:
-      - 8014:8080
+      - 8080:8080
     stdin_open: true
     tty: true
     command: ["yarn","run","serve"]
