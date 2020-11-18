@@ -1,33 +1,3 @@
-<<<<<<< HEAD
-<template>
-  <v-container class="module-outcomes">
-    <div class="module-outcomes__container">
-      <Instruct v-model="setupInstructions" />
-    </div>
-  </v-container>
-</template>
-
-<script lang="ts">
-import { ref } from '@vue/composition-api';
-import Instruct from './ModuleInstruct.vue';
-
-export default {
-  name: 'ModulePresets',
-  components: {
-    Instruct
-  },
-  setup() {
-    const setupInstructions = ref({
-      description: '',
-      instructions: ['']
-    });
-    return {
-      setupInstructions
-    };
-  }
-};
-</script>
-=======
 <template>
   <v-container class="module-outcomes">
     <div class="module-outcomes__container">
@@ -94,7 +64,6 @@ export default {
 import { reactive, ref, toRefs } from '@vue/composition-api';
 import Instruct from './ModuleInstruct.vue';
 // import gql from 'graphql-tag';
-
 export default {
   name: 'ModulePresets',
   components: {
@@ -139,16 +108,13 @@ export default {
     margin-right: 10px;
     margin-top: 10px;
   }
-
   &__reflection {
     margin-left: auto;
   }
-
   &__divider {
     margin-top: 40px;
     margin-bottom: 40px;
   }
-
   &__section-title {
     color: #000000;
     font-size: 25px;
@@ -156,7 +122,6 @@ export default {
     text-align: center;
     margin-bottom: 40px;
   }
-
   &__nopresets {
     border-radius: 5px;
     // border: 1px solid #dedede;
@@ -170,4 +135,3 @@ export default {
   }
 }
 </style>
->>>>>>> upstream/master

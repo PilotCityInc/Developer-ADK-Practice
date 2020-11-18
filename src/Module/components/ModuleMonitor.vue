@@ -1,8 +1,5 @@
 <template>
   <v-container class="module-metrics">
-<<<<<<< HEAD
-    <div class="module-metrics__container"></div>
-=======
     <div class="module-metrics__container">
       <!-- <div class="module-metrics__monitor-title">Monitor Activity</div> -->
       <v-btn class="mb-3" x-small outlined depressed color="grey">MONITOR LIVE DATA</v-btn>
@@ -21,7 +18,6 @@
         class="elevation-0"
       ></v-data-table>
     </div>
->>>>>>> upstream/master
   </v-container>
 </template>
 
@@ -29,13 +25,6 @@
 import Vue from 'vue';
 
 export default Vue.extend({
-<<<<<<< HEAD
-  name: 'ModuleMetrics',
-  apollo: {},
-  data: () => ({})
-});
-</script>
-=======
   data() {
     return {
       headers: [
@@ -134,7 +123,6 @@ export default Vue.extend({
     // align-items: center;
     text-align: center;
   }
-
   &__mongo-chart {
     height: 325px;
     width: 95%;
@@ -148,7 +136,6 @@ export default Vue.extend({
     // border-radius: 12px;
     // box-shadow: 0 2px 10px 0 rgba(16, 17, 17, 0.2);
   }
-
   &__monitor-title {
     font-weight: 800;
     font-size: 28px;
@@ -157,4 +144,3 @@ export default Vue.extend({
   }
 }
 </style>
->>>>>>> upstream/master

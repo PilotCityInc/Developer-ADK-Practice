@@ -1,9 +1,5 @@
 <template>
-<<<<<<< HEAD
-  <v-container class="module-default">
-=======
   <v-container class="module-default__container">
->>>>>>> upstream/master
     <div class="module-default__instructions">
       <v-expansion-panels v-model="showInstructions" class="module-default__instructions" flat>
         <v-expansion-panel>
@@ -11,62 +7,50 @@
             v-show="showInstructions"
             hide-actions
             class="pa-0"
-<<<<<<< HEAD
-            @click="showInstructions = false"
-=======
             @click="showInstructions = true"
->>>>>>> upstream/master
           >
             <template v-slot="{ open }">
               <v-scroll-y-transition hide-on-leave>
                 <div v-if="!open" class="d-flex flex-column justify-center">
-<<<<<<< HEAD
-                  <v-icon class="d-flex justify-center"> mdi-chevron-down </v-icon>
-                  <div class="text-uppercase font-weight-bold text-subtitle-2 text-center">
-                    Instructions
-=======
                   <v-icon color="grey lighten-2" class="d-flex justify-center">
                     mdi-chevron-down
                   </v-icon>
                   <div color="grey lighten-2" class="module-default__collapse-title">
                     INSTRUCTIONS
->>>>>>> upstream/master
                   </div>
                 </div>
               </v-scroll-y-transition>
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-<<<<<<< HEAD
-            <module-instruct readonly />
-            <div @click="showInstructions = true">
-              <div class="text-uppercase font-weight-bold text-subtitle-2 text-center">close</div>
-              <!-- <div class="hr"/> OPTIONAL -->
-              <v-icon class="d-flex justify-center"> mdi-chevron-up </v-icon>
-=======
             <Instruct readonly />
             <div @click="showInstructions = true">
               <div class="module-default__collapse-title">CLOSE</div>
               <!-- <div class="hr"/> OPTIONAL -->
               <v-icon color="grey lighten-2" class="d-flex justify-center"> mdi-chevron-up </v-icon>
->>>>>>> upstream/master
             </div>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
     </div>
-<<<<<<< HEAD
-    <div class="module-default__container"></div>
-=======
 
-    <v-progress-linear
+    <div class="module-default__log-text">
+      <v-text-field class="module-default__text-field" outlined></v-text-field>
+    </div>
+    <div>
+      <v-btn class="module-default__log-btn" depressed :ripple="false">LOG</v-btn>
+    </div>
+
+    <Table class="module-default__table-view"></Table>
+
+    <!-- <v-progress-linear
       class="module-default__collapse-divider"
       color="#dedede"
       height="2"
       value="75"
       buffer-value="95"
       stream
-    />
+    /> -->
 
     <div class="module-default__scope">
       <v-btn dense color="blue" small rounded outlined depressed
@@ -347,22 +331,19 @@
     <div class="module-default__scope">
       <v-btn x-large depressed outlined>Finish Activity</v-btn>
     </div>
->>>>>>> upstream/master
   </v-container>
 </template>
 
 <script lang="ts">
 import { ref } from '@vue/composition-api';
 import Instruct from './ModuleInstruct.vue';
+import Table from './TableView.vue';
 
 export default {
   name: 'ModuleDefault',
   components: {
-<<<<<<< HEAD
-    'module-instruct': Instruct
-=======
-    Instruct
->>>>>>> upstream/master
+    Instruct,
+    Table
   },
   apollo: {},
   data() {
@@ -378,11 +359,33 @@ export default {
   }
 };
 </script>
-<<<<<<< HEAD
-=======
 
 <style lang="scss">
 .module-default {
+  &__log-text {
+    display: flex;
+  }
+  &__text-field {
+    &.v-text-field {
+      width: 150px;
+    }
+  }
+  &__log-btn {
+    &.v-btn:not(.v-btn--round).v-size--default {
+      min-height: 34px;
+      width: 150px;
+    }
+
+    height: 100%;
+  }
+
+  &__table-view {
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 20px;
+  }
+
   &__collapse-divider {
     margin-top: 15px;
     margin-bottom: 75px;
@@ -392,7 +395,6 @@ export default {
     padding-left: none;
     width: 100%;
   }
-
   &__collapse-title {
     color: #dedede;
     text-align: center;
@@ -402,7 +404,6 @@ export default {
     font-size: 13px;
     //  text-uppercase font-weight-bold text-subtitle-2 text-center
   }
-
   &__container {
     // width: 100%;
     // padding: none;
@@ -414,7 +415,6 @@ export default {
     font-size: 25px;
     font-weight: 700;
   }
-
   &__scope {
     font-size: 22px;
     font-weight: 800;
@@ -428,7 +428,6 @@ export default {
     border-radius: 25px;
     // margin: 0px;
     background-color: #dedede;
-
     // text-align: center;
     // justify-content: center;
     // align-items: center;
@@ -443,7 +442,6 @@ export default {
     margin: auto;
     line-height: 30px;
   }
-
   &__faq {
     font-size: 15px;
     font-weight: 700;
@@ -452,7 +450,6 @@ export default {
     margin: auto;
     line-height: 30px;
   }
-
   &__faq-chat {
     display: flex;
     flex-direction: column;
@@ -462,11 +459,9 @@ export default {
   &__faq-chat-line {
     margin: 5px;
   }
-
   &__faq-avatar {
     margin: 5px;
   }
-
   &__faq-question {
     // text-align: left;
     font-family: 'Raleway';
@@ -474,7 +469,6 @@ export default {
     font-weight: 800;
     color: #404142;
   }
-
   &__faq-answer {
     text-align: left;
     font-family: 'Raleway';
@@ -484,7 +478,6 @@ export default {
     color: white;
     font-style: italic;
   }
-
   &__faq-answer-dark {
     text-align: left;
     font-family: 'Raleway';
@@ -494,7 +487,6 @@ export default {
     color: #404142;
     font-style: italic;
   }
-
   &__faq-answer-dark-highlight {
     text-align: left;
     font-family: 'Raleway';
@@ -503,10 +495,8 @@ export default {
     letter-spacing: 0px;
     color: #404142;
   }
-
   &__specs-title {
     font-weight: 800;
   }
 }
 </style>
->>>>>>> upstream/master

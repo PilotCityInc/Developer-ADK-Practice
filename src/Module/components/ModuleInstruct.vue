@@ -50,32 +50,12 @@
 <script lang="ts">
 import {
   computed,
-<<<<<<< HEAD
-  defineComponent,
-  reactive,
-  toRefs,
-  WritableComputedRef
-} from '@vue/composition-api';
-
-=======
   reactive,
   WritableComputedRef,
   toRefs,
   defineComponent
 } from '@vue/composition-api';
 
-<<<<<<< HEAD
-interface Val {
-  description: string;
-  instructions: string[];
-}
-interface Update {
-  updateDesc: (e: Event) => void;
-  updateInstruction: (e: Event) => void;
-}
->>>>>>> upstream/master
-=======
->>>>>>> upstream/master
 export default defineComponent({
   name: 'ModuleInstruct',
   model: {
@@ -100,8 +80,6 @@ export default defineComponent({
   apollo: {},
   setup(props, { emit }) {
     const description: WritableComputedRef<string> = computed({
-<<<<<<< HEAD
-<<<<<<< HEAD
       get: () => props.value.description,
       set: newVal => emit('input', newVal)
     });
@@ -110,23 +88,6 @@ export default defineComponent({
       set: newVal => emit('input', instructions.value.concat(newVal))
     });
     const updateData = reactive({
-=======
-      get: () => (props.value as Val).description,
-=======
-      get: () => props.value.description,
->>>>>>> upstream/master
-      set: newVal => emit('input', newVal)
-    });
-    const instructions: WritableComputedRef<string[]> = computed({
-      get: () => props.value.instructions,
-      set: newVal => emit('input', instructions.value.concat(newVal))
-    });
-<<<<<<< HEAD
-    const updateData: Update = reactive({
->>>>>>> upstream/master
-=======
-    const updateData = reactive({
->>>>>>> upstream/master
       updateDesc: (e: Event) => {
         const target = e.target as HTMLElement;
         description.value = target.innerText;
@@ -144,8 +105,5 @@ export default defineComponent({
   }
 });
 </script>
-<<<<<<< HEAD
-=======
 
 <style lang="scss"></style>
->>>>>>> upstream/master

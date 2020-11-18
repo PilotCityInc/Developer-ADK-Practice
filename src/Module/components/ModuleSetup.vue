@@ -1,24 +1,3 @@
-<<<<<<< HEAD
-<template>
-  <v-container class="module-edit">
-    <div class="module-edit__container"></div>
-  </v-container>
-</template>
-
-<script lang="ts">
-import { ref } from '@vue/composition-api';
-
-export default {
-  name: 'ModuleSetup',
-  setup() {
-    const setupInstructions = ref(['']);
-    return {
-      setupInstructions
-    };
-  }
-};
-</script>
-=======
 <template>
   <v-container class="module-edit">
     <div class="module-edit__container">
@@ -201,10 +180,8 @@ export default {
 <script lang="ts">
 import { reactive, toRefs } from '@vue/composition-api';
 // import gql from 'graphql-tag';
-
 export default {
   name: 'ModuleSetup',
-
   setup() {
     const setup = reactive({
       outcomes: ['Build portfolio project', 'Qualify for internship to execute on project'],
@@ -243,4 +220,3 @@ export default {
   }
 }
 </style>
->>>>>>> upstream/master
