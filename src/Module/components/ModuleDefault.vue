@@ -43,14 +43,22 @@
     />
     <div class="module-edit__container">
       <div class="module-default__log-text">
-        <v-text-field large class="module-default__text-field" outlined></v-text-field>
+        <v-text-field
+          placeholder="0m"
+          label="Enter Minutes"
+          large
+          class="module-default__text-field"
+          outlined
+        ></v-text-field>
       </div>
       <div class="module-default__log-btn-row">
         <v-btn x-large outlined class="module-default__log-btn" depressed :ripple="false"
-          >LOG</v-btn
+          >LOG MINUTES</v-btn
         >
       </div>
-
+      <div class="module-default__log-btn-row mt-3">
+        <v-btn depressed color="#ffffff" small><v-icon left>mdi-undo</v-icon>Undo</v-btn>
+      </div>
       <Table class="module-default__table-view"></Table>
 
       <!-- ENTER CONTENT HERE -->
@@ -87,6 +95,16 @@ export default {
 </script>
 
 <style lang="scss">
+.v-text-field--filled > .v-input__control > .v-input__slot,
+.v-text-field--full-width > .v-input__control > .v-input__slot,
+.v-text-field--outlined > .v-input__control > .v-input__slot {
+  min-height: 125px;
+}
+
+.v-text-field--outlined .v-label {
+  top: 22px;
+}
+
 .module-default {
   &__log-text {
     display: flex;
@@ -99,6 +117,17 @@ export default {
   &__text-field {
     &.v-text-field {
       width: 150px;
+      padding-top: 10px;
+    }
+
+    &.v-input {
+      font-size: 50px;
+      font-weight: 700;
+    }
+
+    &.v-input input {
+      max-height: none;
+      text-align: center;
     }
     // text-align: center !important;
     // font-family: Raleway;
@@ -121,8 +150,8 @@ export default {
 
   &__table-view {
     width: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
+    // padding-left: 10px;
+    // padding-right: 10px;
     margin-bottom: 20px;
   }
   &__none {
