@@ -1,11 +1,22 @@
 <template>
-  <v-container class="module-outcomes">
-    <div class="module-outcomes__container">
-      <!-- <v-divider class="presets__divider"></v-divider> -->
-      <div class="presets__section-title">Minimum practice minutes before unlock</div>
-      <v-text-field placeholder="# of minutes" filled rounded dense></v-text-field>
-    </div>
-  </v-container>
+  <ValidationObserver v-slot="{}" slim>
+    <v-container class="module-outcomes">
+      <div class="module-outcomes__container">
+        <!-- <v-divider class="presets__divider"></v-divider> -->
+        <div class="presets__section-title">Minimum practice minutes before unlock</div>
+        <validation-provider v-slot="{ errors }" slim rules="numeric|required|min_value:1">
+          <v-text-field
+            v-model="minutes"
+            placeholder="# of minutes"
+            :error-messages="errors"
+            filled
+            rounded
+            dense
+          ></v-text-field>
+        </validation-provider>
+      </div>
+    </v-container>
+  </ValidationObserver>
 </template>
 
 <script lang="ts">
@@ -16,31 +27,13 @@ export default {
   components: {},
   apollo: {},
   setup() {
-    const presets = reactive({
-      group: ['Setup', 'Project', 'Screening', 'Internship'],
-      required: ['Creator requires this activity', 'Yes', 'No'],
-      lockOrder: ['Creator locked activity group and placement order', 'Yes', 'No'],
-      deliverable: ['Yes', 'No'],
-      notifications: ['Creator turned on by default', 'Turn on', 'Turn off'],
-      accessibility: [
-        'Creator has turned off accessibility anytime',
-        'Creator has turned on accessibility anytime',
-        'Yes',
-        'No'
-      ],
-      endEarly: [
-        'Creator has not allowed participants to end early after this activity',
-        'Creator has allow end early option only at preset order placement',
-        'Yes',
-        'No'
-      ]
-    });
+    const minutes = ref('');
     const setupInstructions = ref({
       description: '',
       instructions: ['', '', '']
     });
     return {
-      ...toRefs(presets),
+      minutes,
       setupInstructions
     };
   }
