@@ -1,113 +1,120 @@
 <template>
   <ValidationObserver v-slot="{ invalid }" slim>
-    <v-container class="module-default__container">
-      <div class="module-default__instructions">
-        <v-expansion-panels v-model="showInstructions" class="module-default__instructions" flat>
-          <v-expansion-panel>
-            <v-expansion-panel-header
-              v-show="showInstructions"
-              hide-actions
-              class="pa-0"
-              @click="showInstructions = true"
-            >
-              <template v-slot="{ open }">
-                <v-scroll-y-transition hide-on-leave>
-                  <div v-if="!open" class="d-flex flex-column justify-center">
-                    <v-icon color="grey lighten-2" class="d-flex justify-center">
-                      mdi-chevron-down
-                    </v-icon>
-                    <div color="grey lighten-2" class="module-default__collapse-title">
-                      INSTRUCTIONS
-                    </div>
-                  </div>
-                </v-scroll-y-transition>
-              </template>
-            </v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <Instruct readonly />
-              <div @click="showInstructions = true">
-                <div class="module-default__collapse-title">CLOSE</div>
-                <!-- <div class="hr"/> OPTIONAL -->
-                <v-icon color="grey lighten-2" class="d-flex justify-center">
-                  mdi-chevron-up
-                </v-icon>
-              </div>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </div>
-      <v-progress-linear
-        class="module-default__collapse-divider"
-        color="#dedede"
-        height="2"
-        value="100"
-        buffer-value="100"
-        stream
-      />
-      <div class="module-edit__container">
-        <div class="module-default__log-text">
-          <validation-provider v-slot="{ errors }" slim rules="numeric|required|min_value:1">
-            <v-text-field
-              v-model="logMinutes"
-              placeholder="0m"
-              label="Enter Minutes"
-              large
-              class="module-default__text-field"
-              outlined
-              :error-messages="errors"
-            ></v-text-field>
-          </validation-provider>
-        </div>
-        <div class="module-default__log-btn-row">
-          <v-btn
-            x-large
-            outlined
-            class="module-default__log-btn"
-            depressed
-            :ripple="false"
-            :disabled="invalid"
-            >LOG MINUTES</v-btn
+    <!-- <v-container class="module-default__container"> -->
+    <div class="module-default__instructions">
+      <v-expansion-panels v-model="showInstructions" class="module-default__instructions" flat>
+        <v-expansion-panel>
+          <v-expansion-panel-header
+            v-show="showInstructions"
+            hide-actions
+            class="pa-0"
+            @click="showInstructions = true"
           >
-        </div>
-        <div class="module-default__log-btn-row mt-3">
-          <v-btn depressed color="#ffffff" small><v-icon left>mdi-undo</v-icon>Undo</v-btn>
-        </div>
-        <Table class="module-default__table-view"></Table>
-
-        <!-- ENTER CONTENT HERE -->
-        <!-- DESIGN YOUR ACTIVITY HERE / COMMENT OUT WHEN YOU'VE STARTED DESIGNING -->
-        <!-- <div class="module-default__none">Design your activity here</div> -->
+            <template v-slot="{ open }">
+              <v-scroll-y-transition hide-on-leave>
+                <div v-if="!open" class="d-flex flex-column justify-center">
+                  <v-icon color="grey lighten-2" class="d-flex justify-center">
+                    mdi-chevron-down
+                  </v-icon>
+                  <div color="grey lighten-2" class="module-default__collapse-title">
+                    INSTRUCTIONS
+                  </div>
+                </div>
+              </v-scroll-y-transition>
+            </template>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <Instruct readonly />
+            <div @click="showInstructions = true">
+              <div class="module-default__collapse-title">CLOSE</div>
+              <!-- <div class="hr"/> OPTIONAL -->
+              <v-icon color="grey lighten-2" class="d-flex justify-center"> mdi-chevron-up </v-icon>
+            </div>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </div>
+    <v-progress-linear
+      class="module-default__collapse-divider"
+      color="#dedede"
+      height="2"
+      value="100"
+      buffer-value="100"
+      stream
+    />
+    <div class="module-edit__container">
+      <div class="module-default__log-text">
+        <validation-provider v-slot="{ errors }" slim rules="numeric|required|min_value:1">
+          <v-text-field
+            v-model="logMinutes"
+            placeholder="0m"
+            label="Enter Minutes"
+            large
+            class="module-default__text-field"
+            outlined
+            :error-messages="errors"
+          ></v-text-field>
+        </validation-provider>
       </div>
-    </v-container>
+      <div class="module-default__log-btn-row">
+        <v-btn
+          x-large
+          outlined
+          class="module-default__log-btn"
+          depressed
+          :ripple="false"
+          :disabled="invalid"
+          >LOG MINUTES</v-btn
+        >
+      </div>
+      <div class="module-default__log-btn-row mt-3">
+        <v-btn depressed color="#ffffff" small><v-icon left>mdi-undo</v-icon>Undo</v-btn>
+      </div>
+      <Table class="module-default__table-view"></Table>
+
+      <!-- ENTER CONTENT HERE -->
+      <!-- DESIGN YOUR ACTIVITY HERE / COMMENT OUT WHEN YOU'VE STARTED DESIGNING -->
+      <!-- <div class="module-default__none">Design your activity here</div> -->
+    </div>
+    <!-- </v-container> -->
   </ValidationObserver>
 </template>
 
 <script lang="ts">
-import { ref } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import Instruct from './ModuleInstruct.vue';
 import Table from './TableView.vue';
 
-export default {
+export default defineComponent({
   name: 'ModuleDefault',
   components: {
     Instruct,
     Table
   },
-  apollo: {},
-  setup() {
-    const logMinutes = ref('');
-    const setupInstructions = ref({
-      description: '',
-      instructions: ['', '', '']
-    });
-    const showInstructions = ref(true);
+  data() {
     return {
-      setupInstructions,
-      showInstructions,
-      logMinutes
+      logMinutes: '',
+      etupInstructions: {
+        description: '',
+        instructions: ['', '', '']
+      },
+      showInstructions: ''
     };
   }
-};
+  // setup() {
+  //   const logMinutes = ref('');
+  //   const setupInstructions = ref({
+  //     description: '',
+  //     instructions: ['', '', '']
+  //   });
+  //   const showInstructions = ref(true);
+  //   return {
+  //     setupInstructions,
+  //     showInstructions,
+  //     logMinutes
+  //   };
+  // }
+});
 </script>
 
 <style lang="scss">

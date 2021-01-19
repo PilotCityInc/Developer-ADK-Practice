@@ -21,7 +21,6 @@
         @click="currentPage = 'preview'"
         >Preview</v-btn
       >
-
       <v-btn
         v-if="currentPage == 'preview'"
         class="module__navbar-button"
@@ -65,7 +64,7 @@
     <div class="module__container" :style="{ 'border-color': getColor }">
       <div class="module__title">
         <div class="module__image rounded-circle">
-          <v-icon light x-large :color="selectedColor">mdi-stamper</v-icon>
+          <v-icon light x-large :color="selectedColor">mdi-firebase</v-icon>
         </div>
         <div class="module__header text-md-h5 text-sm-subtitle-1 d-flex align-center">
           <input :value="moduleName" type="text" class="module__header-text" />
@@ -239,7 +238,6 @@
               <v-btn class="" icon><v-icon color="grey lighten-2">mdi-thumb-down</v-icon></v-btn>
               <!-- 
               <v-btn x-small outlined depressed class="mx-0">Reply</v-btn>
-
               <v-btn small class="" icon><v-icon color="grey lighten-2">mdi-flag</v-icon></v-btn> -->
             </v-timeline-item>
           </v-slide-x-transition>
@@ -247,14 +245,12 @@
           <!-- <v-timeline-item class="mb-6" hide-dot>
             <span>TODAY</span>
           </v-timeline-item>
-
           <v-timeline-item class="mb-4" color="grey" icon-color="grey lighten-2" small>
             <v-row justify="space-between">
               <v-col cols="7"> This order was archived. </v-col>
               <v-col class="text-right" cols="5"> 15:26 EDT </v-col>
             </v-row>
           </v-timeline-item>
-
           <v-timeline-item class="mb-4" small>
             <v-row justify="space-between">
               <v-col cols="7">
@@ -264,7 +260,6 @@
               <v-col class="text-right" cols="5"> 15:25 EDT </v-col>
             </v-row>
           </v-timeline-item>
-
           <v-timeline-item class="mb-4" color="grey" small>
             <v-row justify="space-between">
               <v-col cols="7">
@@ -273,11 +268,9 @@
               <v-col class="text-right" cols="5"> 15:25 EDT </v-col>
             </v-row>
           </v-timeline-item>
-
           <v-timeline-item class="mb-4" hide-dot>
             <v-btn class="mx-0"> Resend Email </v-btn>
           </v-timeline-item>
-
           <v-timeline-item class="mb-4" color="grey" small>
             <v-row justify="space-between">
               <v-col cols="7">
@@ -286,7 +279,6 @@
               <v-col class="text-right" cols="5"> 15:25 EDT </v-col>
             </v-row>
           </v-timeline-item>
-
           <v-timeline-item color="grey" small>
             <v-row justify="space-between">
               <v-col cols="7">
@@ -309,23 +301,19 @@ body {
   width: 100%;
   height: 100%;
 }
-
 .v-timeline-item__divider {
   align-items: start !important;
 }
-
 .module {
   &__trash {
     // justify-content: start;
     align-items: start;
     // align-content: start;
   }
-
   &__header-chips {
     padding-bottom: 15px;
   }
 }
-
 .v-btn__content.module__chat-menu-button {
   justify-content: left;
   width: 100%;
@@ -339,31 +327,72 @@ body {
 }
 </style>
 <script lang="ts">
-import { computed, reactive, ref, toRefs } from '@vue/composition-api';
-import '@/styles/module.scss';
+import { defineComponent } from '@vue/composition-api';
+import '../styles/module.scss';
 import * as Module from './components';
 
-export default {
+export default defineComponent({
   name: 'ModuleName',
-
   components: {
     'module-monitor': Module.Monitor,
     'module-setup': Module.Setup,
     'module-presets': Module.Presets,
     'module-preview': Module.Default
   },
-  data: () => ({
-    events: [],
-    input: null,
-    nonce: 0
-  }),
-
+  data: () => {
+    return {
+      events: [],
+      input: '',
+      nonce: 0,
+      moduleName: 'Practice',
+      subpages: ['Setup', 'Presets', 'Monitor'],
+      currentPage: 'Setup',
+      pilotcityColors: [
+        ['#6eba80', '#3c9dcd', '#ea6764'],
+        ['#eda1bf', '#fec34b', '#bdbdbd'],
+        ['#ae90b0', '#f79961', '#000000']
+      ],
+      selectedColor: '#f79961',
+      config: {
+        description: '',
+        instruct: ['']
+      },
+      menu: false
+    } as {
+      events: {
+        id: number;
+        text: string;
+        time: string;
+      }[];
+      input: string;
+      nonce: number;
+      moduleName: string;
+      subpages: string[];
+      currentPage: string;
+      pilotcityColors: string[][];
+      selectedColor: string;
+      config: {
+        description: string;
+        instruct: string[];
+      };
+      menu: boolean;
+    };
+  },
   computed: {
-    timeline() {
+    timeline(): Array<{
+      id: number;
+      text: string;
+      time: string;
+    }> {
       return this.events.slice().reverse();
+    },
+    getComponent(): string {
+      return `module-${this.currentPage.toLowerCase()}`;
+    },
+    getColor(): string {
+      return this.selectedColor.substring(0, 7);
     }
   },
-
   methods: {
     comment() {
       const time = new Date().toTimeString();
@@ -373,50 +402,49 @@ export default {
         time: time.replace(/:\d{2}\sGMT-\d{4}\s\((.*)\)/, (match, contents, offset) => {
           return ` ${contents
             .split(' ')
-            .map(v => v.charAt(0))
+            .map((v: string) => v.charAt(0))
             .join('')}`;
         })
       });
-      this.input = null;
+      this.input = '';
     }
-  },
-
-  setup() {
-    // ENTER ACTIVITY NAME BELOW
-    const moduleName = ref('Practice');
-    const page = reactive({
-      subpages: ['Setup', 'Presets', 'Monitor'],
-      currentPage: 'Setup'
-    });
-    const getComponent = computed(() => {
-      return `module-${page.currentPage.toLowerCase()}`;
-    });
-    const color = reactive({
-      pilotcityColors: [
-        ['#6eba80', '#3c9dcd', '#ea6764'],
-        ['#eda1bf', '#fec34b', '#bdbdbd'],
-        ['#ae90b0', '#f79961', '#000000']
-      ],
-      // ENTER ACTIVITY COLOR
-      selectedColor: '#f79961'
-    });
-    const getColor = computed(() => {
-      return color.selectedColor.substring(0, 7);
-    });
-    const config = ref({
-      description: '',
-      instruct: ['']
-    });
-    const menu = ref(false);
-    return {
-      ...toRefs(color as any),
-      ...toRefs(page as any),
-      config,
-      moduleName,
-      menu,
-      getComponent,
-      getColor
-    };
   }
-};
+  // setup() {
+  //   // ENTER ACTIVITY NAME BELOW
+  //   const moduleName = ref('Demonstration');
+  //   const page = reactive({
+  //     subpages: ['Setup', 'Presets', 'Monitor'],
+  //     currentPage: 'Setup'
+  //   });
+  //   const getComponent = computed(() => {
+  //     return `module-${page.currentPage.toLowerCase()}`;
+  //   });
+  //   const color = reactive({
+  //     pilotcityColors: [
+  //       ['#6eba80', '#3c9dcd', '#ea6764'],
+  //       ['#eda1bf', '#fec34b', '#bdbdbd'],
+  //       ['#ae90b0', '#f79961', '#000000']
+  //     ],
+  //     // ENTER ACTIVITY COLOR
+  //     selectedColor: '#ae90b0'
+  //   });
+  //   const getColor = computed(() => {
+  //     return color.selectedColor.substring(0, 7);
+  //   });
+  //   const config = ref({
+  //     description: '',
+  //     instruct: ['']
+  //   });
+  //   const menu = ref(false);
+  //   return {
+  //     ...toRefs(color as any),
+  //     ...toRefs(page as any),
+  //     config,
+  //     moduleName,
+  //     menu,
+  //     getComponent,
+  //     getColor
+  //   };
+  // }
+});
 </script>

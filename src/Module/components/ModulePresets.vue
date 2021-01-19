@@ -20,24 +20,32 @@
 </template>
 
 <script lang="ts">
-import { reactive, ref, toRefs } from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 // import gql from 'graphql-tag';
-export default {
+export default defineComponent({
   name: 'ModulePresets',
   components: {},
-  apollo: {},
-  setup() {
-    const minutes = ref('');
-    const setupInstructions = ref({
-      description: '',
-      instructions: ['', '', '']
-    });
+  data() {
     return {
-      minutes,
-      setupInstructions
+      minutes: '',
+      setupInstructions: {
+        description: '',
+        instructions: ['', '', '']
+      }
     };
   }
-};
+  // setup() {
+  //   const minutes = ref('');
+  //   const setupInstructions = ref({
+  //     description: '',
+  //     instructions: ['', '', '']
+  //   });
+  //   return {
+  //     minutes,
+  //     setupInstructions
+  //   };
+  // }
+});
 </script>
 
 <style lang="scss">
