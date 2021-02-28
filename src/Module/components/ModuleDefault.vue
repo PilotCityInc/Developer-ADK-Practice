@@ -47,9 +47,8 @@
         <validation-provider v-slot="{ errors }" slim rules="numeric|required|min_value:1">
           <v-text-field
             v-model="logMinutes"
-            placeholder="0m"
+            placeholder="0"
             label="Enter Minutes"
-            large
             class="module-default__text-field"
             outlined
             :error-messages="errors"
@@ -94,7 +93,7 @@ export default defineComponent({
   data() {
     return {
       logMinutes: '',
-      etupInstructions: {
+      setupInstructions: {
         description: '',
         instructions: ['', '', '']
       },
@@ -118,16 +117,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.v-text-field--filled > .v-input__control > .v-input__slot,
-.v-text-field--full-width > .v-input__control > .v-input__slot,
-.v-text-field--outlined > .v-input__control > .v-input__slot {
-  min-height: 125px;
-}
-
-.v-text-field--outlined .v-label {
-  top: 22px;
-}
-
 .module-default {
   &__log-text {
     display: flex;
@@ -138,8 +127,24 @@ export default defineComponent({
     // height: 150px !important;
   }
   &__text-field {
+    &.v-input input {
+      max-height: none;
+    }
+    &.v-text-field--outlined > .v-input__control > .v-input__slot {
+      min-height: 150px;
+      min-width: 150px;
+    }
+    &.v-text-field--outlined .v-label {
+      top: 22px;
+    }
+
+    // &.v-text-field--filled > .v-input__control > .v-input__slot,
+    // .v-text-field--full-width > .v-input__control > .v-input__slot,
+    // .v-text-field--outlined > .v-input__control > .v-input__slot {
+    //   min-height: 150px !important;
+    // }
     &.v-text-field {
-      width: 150px;
+      // width: 150px;
       padding-top: 10px;
     }
 
@@ -149,7 +154,7 @@ export default defineComponent({
     }
 
     &.v-input input {
-      max-height: none;
+      // max-height: none;
       text-align: center;
     }
     // text-align: center !important;
@@ -175,7 +180,7 @@ export default defineComponent({
     width: 100%;
     // padding-left: 10px;
     // padding-right: 10px;
-    margin-bottom: 20px;
+    // margin-bottom: 20px;
   }
   &__none {
     border-radius: 5px;
