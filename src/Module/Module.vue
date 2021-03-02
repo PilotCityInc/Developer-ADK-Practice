@@ -285,7 +285,7 @@ export default defineComponent({
     //   _id: props.programId
     // });
     // ENTER ACTIVITY NAME BELOW
-    const moduleName = ref('Practice');
+    const moduleName = ref('Tinker');
     const page = reactive({
       subpages: ['Setup', 'Presets'],
       currentPage: 'Setup'
