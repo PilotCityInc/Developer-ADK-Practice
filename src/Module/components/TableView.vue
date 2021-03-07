@@ -8,8 +8,8 @@
       :headers="header"
       :items="items"
       sort-by="resource"
-      items-per-page="100"
-      hide-default-footer="true"
+      :items-per-page="100"
+      :hide-default-footer="true"
     >
       <template v-slot:item.delete>
         <v-btn small icon depressed>

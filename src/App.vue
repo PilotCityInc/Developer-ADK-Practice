@@ -23,8 +23,8 @@ export default defineComponent({
   setup() {
     const programDocStub: Ref<MongoDoc> = ref({
       data: {
-        firstName: 'me',
-        lastName: 'test',
+        // firstName: 'me',
+        // lastName: 'test',
         // _id: new ObjectId(1),
         // team: null as null | ObjectId,
         adks: []

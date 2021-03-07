@@ -44,7 +44,7 @@
     />
     <div class="module-edit__container">
       <div class="module-default__log-text">
-        <validation-provider v-slot="{ errors }" slim rules="numeric|required|min_value:1">
+        <validation-provider v-slot="{ errors }" slim rules="numeric|min_value:1">
           <v-text-field
             v-model="adkData.practiceLog[logIndex].minutes"
             placeholder="0"
@@ -112,8 +112,8 @@ export default defineComponent({
         {
           minutes: '',
           timestamp: '',
-          firstName: '',
-          lastName: ''
+          firstName: 'Me',
+          lastName: 'Meme'
         }
       ]
     };
@@ -129,10 +129,10 @@ export default defineComponent({
     // const minutes = ref('');
 
     const logIndex = ref(adkData.value.practiceLog.length - 1);
-    console.log(logIndex.value);
+    // console.log(logIndex.value);
 
     function logMinutes() {
-      // timestamp
+      // timestamp, figure out way to only display month, day, and time ex: Jul 12 at 8:10pm
       let timestamp = new Date();
       const unixtime = timestamp.valueOf();
       timestamp = new Date(unixtime);
@@ -140,8 +140,9 @@ export default defineComponent({
       const log = ref({
         minutes: '',
         timestamp: '',
-        firstName: '',
-        lastName: ''
+        // need a way to get student firstName and student LastName
+        firstName: 'Me',
+        lastName: 'Me'
       });
       // console.log(`Minutes logged: ${minutes.value}`);
       adkData.value.practiceLog.push(log.value);
@@ -149,7 +150,7 @@ export default defineComponent({
       console.log(adkData.value.practiceLog);
       // eslint-disable-next-line no-plusplus
       logIndex.value++;
-      // console.log(timestamp);
+      console.log(logIndex.value);
     }
 
     const setupInstructions = ref({
