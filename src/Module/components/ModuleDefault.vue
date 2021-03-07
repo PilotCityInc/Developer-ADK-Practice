@@ -46,7 +46,7 @@
       <div class="module-default__log-text">
         <validation-provider v-slot="{ errors }" slim rules="numeric|required|min_value:1">
           <v-text-field
-            v-model="logMinutes"
+            v-model="adkData.practiceLog[logIndex].minutes"
             placeholder="0"
             label="Enter Minutes"
             class="module-default__text-field"
@@ -63,6 +63,7 @@
           depressed
           :ripple="false"
           :disabled="invalid"
+          @click="logMinutes"
           >LOG MINUTES</v-btn
         >
       </div>
@@ -80,9 +81,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, PropType, ref } from '@vue/composition-api';
+import { getModAdk, getModMongoDoc } from 'pcv4lib/src';
 import Instruct from './ModuleInstruct.vue';
 import Table from './TableView.vue';
+import MongoDoc from '../types';
 
 export default defineComponent({
   name: 'ModuleDefault',
@@ -90,14 +93,78 @@ export default defineComponent({
     Instruct,
     Table
   },
-  data() {
+  props: {
+    value: {
+      required: true,
+      type: Object as PropType<MongoDoc>
+    },
+    studentDoc: {
+      required: true,
+      type: Object as PropType<MongoDoc | null>,
+      default: () => {}
+    }
+  },
+  setup(props, ctx) {
+    const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
+
+    const initPracticeDefault = {
+      practiceLog: [
+        {
+          minutes: '',
+          timestamp: '',
+          firstName: '',
+          lastName: ''
+        }
+      ]
+    };
+    const { adkData } = getModAdk(
+      props,
+      ctx.emit,
+      'Practice',
+      initPracticeDefault,
+      'studentDoc',
+      'inputStudentDoc'
+    );
+
+    // const minutes = ref('');
+
+    const logIndex = ref(adkData.value.practiceLog.length - 1);
+    console.log(logIndex.value);
+
+    function logMinutes() {
+      // timestamp
+      let timestamp = new Date();
+      const unixtime = timestamp.valueOf();
+      timestamp = new Date(unixtime);
+
+      const log = ref({
+        minutes: '',
+        timestamp: '',
+        firstName: '',
+        lastName: ''
+      });
+      // console.log(`Minutes logged: ${minutes.value}`);
+      adkData.value.practiceLog.push(log.value);
+      adkData.value.practiceLog[logIndex.value].timestamp = timestamp;
+      console.log(adkData.value.practiceLog);
+      // eslint-disable-next-line no-plusplus
+      logIndex.value++;
+      // console.log(timestamp);
+    }
+
+    const setupInstructions = ref({
+      description: '',
+      instructions: ['', '', '']
+    });
+
     return {
-      logMinutes: '',
-      setupInstructions: {
-        description: '',
-        instructions: ['', '', '']
-      },
-      showInstructions: ''
+      studentDocument,
+      // minutes,
+      setupInstructions,
+      showInstructions: 'true',
+      adkData,
+      logMinutes,
+      logIndex
     };
   }
   // setup() {

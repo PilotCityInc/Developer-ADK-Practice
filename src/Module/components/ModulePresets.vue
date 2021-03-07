@@ -9,15 +9,30 @@
           <div class="module-outcomes__container"> -->
         <!-- <v-divider class="presets__divider"></v-divider> -->
         <!-- <div class="presets__section-title">Minimum practice minutes before unlock</div> -->
-        <validation-provider v-slot="{ errors }" slim rules="numeric|required|min_value:1">
+        <validation-provider v-slot="{ errors }" slim rules="required">
           <v-select
-            v-model="hours"
+            v-model="adkData.minimumHours"
             label="Minimum logged hours"
             :error-messages="errors"
             :items="minimumHours"
             x-large
             outlined
           ></v-select>
+          <div center class="module-setup__save-button">
+            <v-btn
+              center
+              class="mt-12"
+              x-large
+              outlined
+              depressed
+              :loading="loading"
+              @click="process()"
+              >Save</v-btn
+            >
+          </div>
+          <v-alert v-if="success || error" class="mt-3" :type="success ? 'success' : 'error'">{{
+            message
+          }}</v-alert>
         </validation-provider>
         <!-- </div>
         </v-container> -->
@@ -88,44 +103,75 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, PropType, toRefs, reactive, ref } from '@vue/composition-api';
+import { loading, getModAdk, getModMongoDoc } from 'pcv4lib/src';
 import Instruct from './ModuleInstruct.vue';
+import { group, required, deliverable, endEarly, minimumHours } from './const';
+import MongoDoc from '../types';
 // import gql from 'graphql-tag';
+
 export default defineComponent({
   name: 'ModulePresets',
   components: {
     Instruct
   },
-  data() {
-    return {
-      hours: '',
-      minimumHours: [
-        '1 Hour',
-        '2 Hours',
-        '3 Hours',
-        '4 Hours',
-        '5 Hours',
-        '6 Hours',
-        '7 Hours',
-        '8 Hours',
-        '9 Hours',
-        '10 Hours',
-        '11 Hours',
-        '12 Hours',
-        '13 Hours',
-        '14 Hours',
-        '15 Hours',
-        '16 Hours',
-        '17 Hours',
-        '18 Hours',
-        '19 Hours',
-        '20 Hours',
-        '21 Hours'
-      ],
-      setupInstructions: {
-        description: '',
-        instructions: ['', '', '']
+  props: {
+    value: {
+      required: true,
+      type: Object as PropType<MongoDoc>
+    },
+    studentDoc: {
+      required: true,
+      type: Object as PropType<MongoDoc | null>,
+      default: () => {}
+    }
+  },
+  setup(props, ctx) {
+    const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
+
+    const initPracticePresets = {
+      minimumHours: '10',
+      defaultActivity: {
+        groupActivity: 'Screening',
+        requiredActivity: 'Yes',
+        deliverableActivity: 'No',
+        endEarlyActivity: 'Yes',
+        required: false
       }
+    };
+
+    const { adkData } = getModAdk(
+      props,
+      ctx.emit,
+      'Practice',
+      initPracticePresets,
+      'studentDoc',
+      'inputStudentDoc'
+    );
+
+    const presets = reactive({
+      group,
+      required,
+      deliverable,
+      endEarly,
+      minimumHours
+    });
+
+    // function minuteCheck() {
+    // console.log(programDoc.data.adks[index].maxCharacters);
+    // }
+
+    const setupInstructions = ref({
+      description: '',
+      instructions: ['', '', '']
+    });
+
+    return {
+      setupInstructions,
+      studentDocument,
+      adkData,
+      ...toRefs(presets),
+      ...loading(studentDocument.value.update, 'Saved Successfully', 'Could not save at this time')
     };
   }
   // setup() {
@@ -172,6 +218,12 @@ export default defineComponent({
     color: #ffffff;
     font-size: 18px;
     padding-top: 35px;
+  }
+}
+.module-setup {
+  &__save-button {
+    display: flex;
+    justify-content: center;
   }
 }
 </style>
