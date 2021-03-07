@@ -106,7 +106,9 @@
               :is="getComponent"
               v-model="studentDoc"
               :student-doc="studentDoc"
+              :team-doc="teamDoc"
               @inputStudentDoc="$emit('inputStudentDoc', $event)"
+              @inputTeamDoc="$emit('inputTeamDoc', $event)"
             />
           </keep-alive>
         </div>
@@ -285,10 +287,16 @@ export default defineComponent({
       required: true,
       type: Object as PropType<MongoDoc | null>,
       default: () => {}
+    },
+    teamDoc: {
+      required: true,
+      type: Object as PropType<MongoDoc | null>,
+      default: () => {}
     }
   },
   setup(props, ctx) {
     const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
+    const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
 
     // ENTER ACTIVITY NAME BELOW
     const moduleName = ref('Tinker');
@@ -354,7 +362,8 @@ export default defineComponent({
       ...toRefs(timelineData),
       timeline,
       comment,
-      studentDocument
+      studentDocument,
+      teamDocument
     };
   }
 });

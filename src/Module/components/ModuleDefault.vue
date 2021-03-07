@@ -68,7 +68,9 @@
         >
       </div>
       <div class="module-default__log-btn-row mt-3">
-        <v-btn depressed color="#ffffff" small><v-icon left>mdi-undo</v-icon>Undo</v-btn>
+        <v-btn depressed color="#ffffff" small @click="undo"
+          ><v-icon left>mdi-undo</v-icon>Undo</v-btn
+        >
       </div>
       <Table class="module-default__table-view"></Table>
 
@@ -102,18 +104,25 @@ export default defineComponent({
       required: true,
       type: Object as PropType<MongoDoc | null>,
       default: () => {}
+    },
+    teamDoc: {
+      required: true,
+      type: Object as PropType<MongoDoc | null>,
+      default: () => {}
     }
   },
   setup(props, ctx) {
     const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
+    const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
 
     const initPracticeDefault = {
       practiceLog: [
         {
           minutes: '',
           timestamp: '',
-          firstName: 'Me',
-          lastName: 'Meme'
+          firstName: studentDocument.value.data.firstName,
+          lastName: studentDocument.value.data.lastName,
+          team: teamDocument.value.data.name
         }
       ]
     };
@@ -141,8 +150,9 @@ export default defineComponent({
         minutes: '',
         timestamp: '',
         // need a way to get student firstName and student LastName
-        firstName: 'Me',
-        lastName: 'Me'
+        firstName: studentDocument.value.data.firstName,
+        lastName: studentDocument.value.data.lastName,
+        team: teamDocument.value.data.team
       });
       // console.log(`Minutes logged: ${minutes.value}`);
       adkData.value.practiceLog.push(log.value);
@@ -151,6 +161,29 @@ export default defineComponent({
       // eslint-disable-next-line no-plusplus
       logIndex.value++;
       console.log(logIndex.value);
+    }
+
+    function undo() {
+      adkData.value.practiceLog.pop();
+      adkData.value.practiceLog.pop();
+      console.log(adkData.value.practiceLog);
+      // eslint-disable-next-line no-plusplus
+      logIndex.value -= 2;
+      let timestamp = new Date();
+      const unixtime = timestamp.valueOf();
+      timestamp = new Date(unixtime);
+
+      const log = ref({
+        minutes: '',
+        timestamp: '',
+        // need a way to get student firstName and student LastName
+        firstName: 'Me',
+        lastName: 'Me'
+      });
+      // console.log(`Minutes logged: ${minutes.value}`);
+      adkData.value.practiceLog.push(log.value);
+      // eslint-disable-next-line no-plusplus
+      logIndex.value++;
     }
 
     const setupInstructions = ref({
@@ -165,7 +198,9 @@ export default defineComponent({
       showInstructions: 'true',
       adkData,
       logMinutes,
-      logIndex
+      logIndex,
+      undo,
+      teamDocument
     };
   }
   // setup() {

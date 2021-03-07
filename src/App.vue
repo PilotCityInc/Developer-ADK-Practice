@@ -3,7 +3,9 @@
     <Module
       v-model="programDocStub"
       :student-doc="studentDoc"
+      :team-doc="teamDoc"
       @inputStudentDoc="studentDoc = $event"
+      @inputTeamDoc="teamDoc = $event"
     />
   </v-app>
 </template>
@@ -42,6 +44,23 @@ export default defineComponent({
     });
     const studentDoc: Ref<MongoDoc> = ref({
       data: {
+        firstName: 'Test First',
+        lastName: 'Test Last',
+        adks: []
+      },
+      update: () => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(true);
+            // reject(new Error('REJECTED'));
+          }, 3000);
+        });
+      },
+      changeStream: {}
+    });
+    const teamDoc: Ref<MongoDoc> = ref({
+      data: {
+        name: 'Team',
         adks: []
       },
       update: () => {
@@ -56,7 +75,8 @@ export default defineComponent({
     });
     return {
       programDocStub,
-      studentDoc
+      studentDoc,
+      teamDoc
     };
   }
 });
