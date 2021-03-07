@@ -149,10 +149,9 @@ export default defineComponent({
       const log = ref({
         minutes: '',
         timestamp: '',
-        // need a way to get student firstName and student LastName
         firstName: studentDocument.value.data.firstName,
         lastName: studentDocument.value.data.lastName,
-        team: teamDocument.value.data.team
+        team: teamDocument.value.data.name
       });
       // console.log(`Minutes logged: ${minutes.value}`);
       adkData.value.practiceLog.push(log.value);
@@ -176,9 +175,9 @@ export default defineComponent({
       const log = ref({
         minutes: '',
         timestamp: '',
-        // need a way to get student firstName and student LastName
-        firstName: 'Me',
-        lastName: 'Me'
+        firstName: studentDocument.value.data.firstName,
+        lastName: studentDocument.value.data.lastName,
+        team: teamDocument.value.data.name
       });
       // console.log(`Minutes logged: ${minutes.value}`);
       adkData.value.practiceLog.push(log.value);
