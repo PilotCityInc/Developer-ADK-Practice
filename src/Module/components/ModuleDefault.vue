@@ -44,7 +44,7 @@
     />
     <div class="module-edit__container">
       <div class="module-default__log-text">
-        <validation-provider v-slot="{ errors }" slim rules="numeric|min_value:1">
+        <validation-provider v-slot="{ errors }" slim rules="numeric|min_value:1|required">
           <v-text-field
             v-model="adkData.practiceLog[logIndex].minutes"
             placeholder="0"
@@ -63,7 +63,7 @@
           depressed
           :ripple="false"
           :disabled="invalid"
-          @click="logMinutes"
+          @click="process"
           >LOG MINUTES</v-btn
         >
       </div>
@@ -72,7 +72,12 @@
           ><v-icon left>mdi-undo</v-icon>Undo</v-btn
         >
       </div>
-      <Table class="module-default__table-view"></Table>
+      <Table
+        :final-value-log="finalValueLog"
+        :student-doc="studentDocument"
+        :team-doc="teamDocument"
+        class="module-default__table-view"
+      ></Table>
 
       <!-- ENTER CONTENT HERE -->
       <!-- DESIGN YOUR ACTIVITY HERE / COMMENT OUT WHEN YOU'VE STARTED DESIGNING -->
@@ -83,8 +88,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from '@vue/composition-api';
-import { getModAdk, getModMongoDoc } from 'pcv4lib/src';
+import { defineComponent, computed, PropType, ref } from '@vue/composition-api';
+import { getModAdk, getModMongoDoc, loading } from 'pcv4lib/src';
 import Instruct from './ModuleInstruct.vue';
 import Table from './TableView.vue';
 import MongoDoc from '../types';
@@ -109,7 +114,8 @@ export default defineComponent({
       required: true,
       type: Object as PropType<MongoDoc | null>,
       default: () => {}
-    }
+    },
+    loggedNum: Number
   },
   setup(props, ctx) {
     const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
@@ -139,6 +145,9 @@ export default defineComponent({
 
     const logIndex = ref(adkData.value.practiceLog.length - 1);
     // console.log(logIndex.value);
+    const lengthPractice = ref(0);
+
+    const finalValueLog = ref(0);
 
     function logMinutes() {
       // timestamp, figure out way to only display month, day, and time ex: Jul 12 at 8:10pm
@@ -154,35 +163,61 @@ export default defineComponent({
         team: teamDocument.value.data.name
       });
       // console.log(`Minutes logged: ${minutes.value}`);
+      // console.log(adkData.value.practiceLog);
       adkData.value.practiceLog.push(log.value);
       adkData.value.practiceLog[logIndex.value].timestamp = timestamp;
-      console.log(adkData.value.practiceLog);
+      // console.log(adkData.value.practiceLog);
       // eslint-disable-next-line no-plusplus
       logIndex.value++;
-      console.log(logIndex.value);
+
+      lengthPractice.value = 0;
+
+      // for the final value logging
+      finalValueLog.value = 0;
+
+      while (lengthPractice.value <= logIndex.value - 1) {
+        // console.log(adkData.value.practiceLog[lengthPractice.value].minutes);
+        // eslint-disable-next-line radix
+        finalValueLog.value += parseInt(adkData.value.practiceLog[lengthPractice.value].minutes);
+
+        lengthPractice.value += 1;
+      }
+
+      return new Promise((resolve, reject) => {
+        studentDocument.value.update();
+        resolve(true);
+      });
     }
 
     function undo() {
-      adkData.value.practiceLog.pop();
-      adkData.value.practiceLog.pop();
-      console.log(adkData.value.practiceLog);
       // eslint-disable-next-line no-plusplus
-      logIndex.value -= 2;
-      let timestamp = new Date();
-      const unixtime = timestamp.valueOf();
-      timestamp = new Date(unixtime);
+      if (adkData.value.practiceLog.length !== 1) {
+        logIndex.value -= 2;
 
-      const log = ref({
-        minutes: '',
-        timestamp: '',
-        firstName: studentDocument.value.data.firstName,
-        lastName: studentDocument.value.data.lastName,
-        team: teamDocument.value.data.name
-      });
-      // console.log(`Minutes logged: ${minutes.value}`);
-      adkData.value.practiceLog.push(log.value);
-      // eslint-disable-next-line no-plusplus
-      logIndex.value++;
+        // console.log(adkData.value.practiceLog[adkData.value.practiceLog.length - 2].minutes);
+        // eslint-disable-next-line radix
+        finalValueLog.value -= parseInt(
+          adkData.value.practiceLog[adkData.value.practiceLog.length - 2].minutes
+        );
+        // console.log(finalValueLog.value);
+
+        adkData.value.practiceLog.pop();
+        adkData.value.practiceLog.pop();
+
+        // console.log(adkData.value.practiceLog);
+
+        const log = ref({
+          minutes: '',
+          timestamp: '',
+          firstName: studentDocument.value.data.firstName,
+          lastName: studentDocument.value.data.lastName,
+          team: teamDocument.value.data.name
+        });
+
+        adkData.value.practiceLog.push(log.value);
+        // eslint-disable-next-line no-plusplus
+        logIndex.value++;
+      }
     }
 
     const setupInstructions = ref({
@@ -192,14 +227,16 @@ export default defineComponent({
 
     return {
       studentDocument,
+      finalValueLog,
       // minutes,
       setupInstructions,
       showInstructions: 'true',
       adkData,
-      logMinutes,
+      // logMinutes,
       logIndex,
       undo,
-      teamDocument
+      teamDocument,
+      ...loading(logMinutes, 'Logged Successfully', 'Could not log at this time')
     };
   }
   // setup() {

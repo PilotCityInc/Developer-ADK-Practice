@@ -11,7 +11,7 @@
         <!-- <div class="presets__section-title">Minimum practice minutes before unlock</div> -->
         <validation-provider v-slot="{ errors }" slim rules="required">
           <v-select
-            v-model="adkData.minimumHours"
+            v-model="adkData.minimumHoursNow"
             label="Minimum logged hours"
             :error-messages="errors"
             :items="minimumHours"
@@ -44,12 +44,14 @@
       <div class="presets__section-title">Defaults</div>
 
       <v-select
+        v-model="adkData.defaultActivity.groupActivity"
         disabled
         :items="group"
         label="What activity group does this belong to?"
         outlined
       ></v-select>
       <v-select
+        v-model="adkData.defaultActivity.requiredActivity"
         disabled
         :items="required"
         label="Is this activity required for participants to complete?"
@@ -61,13 +63,20 @@
         label="Lock activity group and placement order?"
         outlined
       ></v-select> -->
-      <v-select disabled :items="deliverable" label="Is this a deliverable?" outlined></v-select>
+      <v-select
+        v-model="adkData.defaultActivity.deliverableActivity"
+        disabled
+        :items="deliverable"
+        label="Is this a deliverable?"
+        outlined
+      ></v-select>
       <!-- <v-select
         :items="accessibility"
         label="Make this activity accessible to participants anytime?"
         outlined
       ></v-select> -->
       <v-select
+        v-model="adkData.defaultActivity.endEarlyActivity"
         disabled
         :items="endEarly"
         label="Allow participants to end program early after completion of this activity?"
@@ -130,7 +139,7 @@ export default defineComponent({
     const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
 
     const initPracticePresets = {
-      minimumHours: '10',
+      minimumHoursNow: '3 Hours',
       defaultActivity: {
         groupActivity: 'Screening',
         requiredActivity: 'Yes',
@@ -157,9 +166,17 @@ export default defineComponent({
       minimumHours
     });
 
-    // function minuteCheck() {
-    // console.log(programDoc.data.adks[index].maxCharacters);
-    // }
+    function populate() {
+      // console.log(studentDocument);
+      return new Promise((resolve, reject) => {
+        studentDocument.value.update();
+        resolve(true);
+      });
+    }
+
+    function minuteCheck() {
+      console.log(adkData.value.minimumHoursNow);
+    }
 
     const setupInstructions = ref({
       description: '',
@@ -167,11 +184,12 @@ export default defineComponent({
     });
 
     return {
+      minuteCheck,
       setupInstructions,
       studentDocument,
       adkData,
       ...toRefs(presets),
-      ...loading(studentDocument.value.update, 'Saved Successfully', 'Could not save at this time')
+      ...loading(populate, 'Saved Successfully', 'Could not save at this time')
     };
   }
   // setup() {
