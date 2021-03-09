@@ -1,6 +1,6 @@
 export const HEADER = [
-  { text: 'Log', align: 'start', value: 'minutes', width: '20%' },
-  { text: 'Team Member', align: 'start', value: 'firstName', width: '40%' },
+  { text: 'Minutes submitted', align: 'start', value: 'minutes', width: '20%' },
+  { text: 'Team Member', align: 'start', value: 'name', width: '40%' },
   { text: 'Timestamp', align: 'start', value: 'timestamp', width: '35%' },
   { text: 'Delete', align: 'center', value: 'delete', sortable: false, width: '5%' }
 ];

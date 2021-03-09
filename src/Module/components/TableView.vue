@@ -6,27 +6,30 @@
     <div class="tableview__total-log mb-6">
       {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
     </div>
-    <v-data-table
-      v-model="studentDocument.data.adks[0].practiceLog"
-      :headers="header"
-      :items="studentDocument.data.adks[0].practiceLog"
-      sort-by="resource"
-      :items-per-page="100"
-      :hide-default-footer="true"
-    >
-      <template v-slot:item.delete>
-        <v-btn small icon depressed>
-          <v-icon small> mdi-delete </v-icon>
-        </v-btn>
-      </template>
-    </v-data-table>
+    <div>
+      <v-data-table
+        :key="componentKey"
+        :headers="header"
+        :items="studentAdkData.practiceLog"
+        sort-by="resource"
+        :items-per-page="100"
+        :hide-default-footer="true"
+      >
+        <template v-slot:item.delete>
+          <v-btn small icon depressed>
+            <v-icon small> mdi-delete </v-icon>
+          </v-btn>
+        </template>
+      </v-data-table>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref } from '@vue/composition-api';
-import { getModMongoDoc } from 'pcv4lib/src';
+import { PropType, ref } from '@vue/composition-api';
+import { getModMongoDoc, getModAdk } from 'pcv4lib/src';
 import { items, HEADER } from './const';
+import MongoDoc from '../types';
 
 export default {
   name: 'TableView',
@@ -43,19 +46,39 @@ export default {
       type: Object as PropType<MongoDoc | null>,
       default: () => {}
     },
+    // eslint-disable-next-line vue/require-default-prop
     finalValueLog: Number
   },
   setup(props, ctx) {
     const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
     const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
+    // const { adkData } = getModAdk(props, ctx.emit, 'practice', 'studentDoc', 'inputStudentDoc');
 
-    console.log(studentDocument.value.data.adks[0].practiceLog);
+    // console.log(studentDocument.value.data.adks);
+
+    const { adkData: studentAdkData } = getModAdk(
+      props,
+      ctx.emit,
+      'Practice',
+      {},
+      'studentDoc',
+      'inputStudentDoc'
+    );
+
+    console.log(studentAdkData.value.practiceLog);
+
+    const componentKey = ref(0);
 
     // test function to check the values of the prop value being imported no need anymore
-    function test() {
-      console.log(props.finalValueLog);
-    }
-    return { header: ref(HEADER), items, test, studentDocument };
+
+    return {
+      header: ref(HEADER),
+      items: ref(items),
+      studentDocument,
+      studentAdkData,
+      teamDocument,
+      componentKey
+    };
   }
 };
 </script>

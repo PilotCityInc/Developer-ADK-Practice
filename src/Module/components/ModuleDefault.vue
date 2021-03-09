@@ -68,16 +68,33 @@
         >
       </div>
       <div class="module-default__log-btn-row mt-3">
-        <v-btn depressed color="#ffffff" small @click="undo"
+        <v-btn v-if="adkData.practiceLog.length > 1" depressed color="#ffffff" small @click="undo"
           ><v-icon left>mdi-undo</v-icon>Undo</v-btn
         >
       </div>
-      <Table
-        :final-value-log="finalValueLog"
-        :student-doc="studentDocument"
-        :team-doc="teamDocument"
-        class="module-default__table-view"
-      ></Table>
+      <div class="tableview__column mt-12">
+        <v-btn x-small outlined depressed class="mr-1 mb-2">Personal</v-btn>
+        <v-btn class="ml-1 mb-2" x-small outlined depressed>Team</v-btn>
+        <div class="tableview__total-log-title mt-6 b-2">Logged Time</div>
+        <div class="tableview__total-log mb-6">
+          {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
+        </div>
+        <div :key="tableRefresh">
+          <v-data-table
+            :headers="header"
+            :items="adkData.practiceLog"
+            sort-by="resource"
+            :items-per-page="100"
+            :hide-default-footer="true"
+          >
+            <template v-slot:item.delete>
+              <v-btn small icon depressed @click="deleteLog(adkData.practiceLog[index])">
+                <v-icon small> mdi-delete </v-icon>
+              </v-btn>
+            </template>
+          </v-data-table>
+        </div>
+      </div>
 
       <!-- ENTER CONTENT HERE -->
       <!-- DESIGN YOUR ACTIVITY HERE / COMMENT OUT WHEN YOU'VE STARTED DESIGNING -->
@@ -93,6 +110,7 @@ import { getModAdk, getModMongoDoc, loading } from 'pcv4lib/src';
 import Instruct from './ModuleInstruct.vue';
 import Table from './TableView.vue';
 import MongoDoc from '../types';
+import { items, HEADER } from './const';
 
 export default defineComponent({
   name: 'ModuleDefault',
@@ -126,8 +144,7 @@ export default defineComponent({
         {
           minutes: '',
           timestamp: '',
-          firstName: studentDocument.value.data.firstName,
-          lastName: studentDocument.value.data.lastName,
+          name: '',
           team: teamDocument.value.data.name
         }
       ]
@@ -141,12 +158,14 @@ export default defineComponent({
       'inputStudentDoc'
     );
 
+    console.log(adkData.value.practiceLog);
+
     // const minutes = ref('');
 
     const logIndex = ref(adkData.value.practiceLog.length - 1);
     // console.log(logIndex.value);
     const lengthPractice = ref(0);
-
+    const tableRefresh = ref(0);
     const finalValueLog = ref(0);
 
     function logMinutes() {
@@ -158,14 +177,16 @@ export default defineComponent({
       const log = ref({
         minutes: '',
         timestamp: '',
-        firstName: studentDocument.value.data.firstName,
-        lastName: studentDocument.value.data.lastName,
+        name: '',
         team: teamDocument.value.data.name
       });
       // console.log(`Minutes logged: ${minutes.value}`);
       // console.log(adkData.value.practiceLog);
       adkData.value.practiceLog.push(log.value);
       adkData.value.practiceLog[logIndex.value].timestamp = timestamp;
+      adkData.value.practiceLog[
+        logIndex.value
+      ].name = `${studentDocument.value.data.firstName} ${studentDocument.value.data.lastName}`;
       // console.log(adkData.value.practiceLog);
       // eslint-disable-next-line no-plusplus
       logIndex.value++;
@@ -174,6 +195,7 @@ export default defineComponent({
 
       // for the final value logging
       finalValueLog.value = 0;
+      tableRefresh.value += 1;
 
       while (lengthPractice.value <= logIndex.value - 1) {
         // console.log(adkData.value.practiceLog[lengthPractice.value].minutes);
@@ -182,7 +204,7 @@ export default defineComponent({
 
         lengthPractice.value += 1;
       }
-
+      console.log(adkData.value.practiceLog);
       return new Promise((resolve, reject) => {
         studentDocument.value.update();
         resolve(true);
@@ -190,8 +212,14 @@ export default defineComponent({
     }
 
     function undo() {
+      const log = ref({
+        minutes: '',
+        timestamp: '',
+        name: '',
+        team: teamDocument.value.data.name
+      });
       // eslint-disable-next-line no-plusplus
-      if (adkData.value.practiceLog.length !== 1) {
+      if (adkData.value.practiceLog.length > 2) {
         logIndex.value -= 2;
 
         // console.log(adkData.value.practiceLog[adkData.value.practiceLog.length - 2].minutes);
@@ -206,18 +234,32 @@ export default defineComponent({
 
         // console.log(adkData.value.practiceLog);
 
-        const log = ref({
-          minutes: '',
-          timestamp: '',
-          firstName: studentDocument.value.data.firstName,
-          lastName: studentDocument.value.data.lastName,
-          team: teamDocument.value.data.name
-        });
-
         adkData.value.practiceLog.push(log.value);
+        adkData.value.practiceLog[
+          logIndex.value
+        ].name = `${studentDocument.value.data.firstName} ${studentDocument.value.data.lastName}`;
         // eslint-disable-next-line no-plusplus
         logIndex.value++;
+        tableRefresh.value += 1;
+      } else {
+        // eslint-disable-next-line radix
+        finalValueLog.value -= parseInt(
+          adkData.value.practiceLog[adkData.value.practiceLog.length - 2].minutes
+        );
+        logIndex.value -= 2;
+        adkData.value.practiceLog.pop();
+        adkData.value.practiceLog.pop();
+        adkData.value.practiceLog.push(log.value);
+        // adkData.value.practiceLog[0].name = `${studentDocument.value.data.firstName} ${studentDocument.value.data.lastName}`;
+        // eslint-disable-next-line no-plusplus
+        logIndex.value++;
+        tableRefresh.value += 1;
+        // console.log('last log');
       }
+    }
+
+    function deleteLog(item: string) {
+      console.log(item);
     }
 
     const setupInstructions = ref({
@@ -236,7 +278,11 @@ export default defineComponent({
       logIndex,
       undo,
       teamDocument,
-      ...loading(logMinutes, 'Logged Successfully', 'Could not log at this time')
+      ...loading(logMinutes, 'Logged Successfully', 'Could not log at this time'),
+      items,
+      header: ref(HEADER),
+      tableRefresh,
+      deleteLog
     };
   }
   // setup() {
