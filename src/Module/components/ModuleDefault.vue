@@ -73,12 +73,18 @@
         >
       </div>
       <div class="tableview__column mt-12">
-        <v-btn x-small outlined depressed class="mr-1 mb-2">Personal</v-btn>
-        <v-btn class="ml-1 mb-2" x-small outlined depressed>Team</v-btn>
+        <!-- <v-btn x-small outlined depressed class="mr-1 mb-2">Personal</v-btn> -->
+        <!-- <v-btn class="ml-1 mb-2" x-small outlined depressed>Team</v-btn> -->
         <div class="tableview__total-log-title mt-6 b-2">Logged Time</div>
         <div class="tableview__total-log mb-6">
           {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
         </div>
+        <!-- <div v-if="finalValueLog">
+          <div class="tableview__total-log-title mt-6 b-2">Required Time Left</div>
+          <div class="tableview__total-log mb-6">
+            {{ Math.floor(adkData.defaultActivity.endEarlyActivity * 60) - finalValueLog }}m
+          </div>
+        </div> -->
         <div :key="tableRefresh">
           <v-data-table
             :headers="header"
@@ -87,11 +93,11 @@
             :items-per-page="100"
             :hide-default-footer="true"
           >
-            <template v-slot:item.delete>
+            <!-- <template v-slot:item.delete>
               <v-btn small icon depressed @click="deleteLog(adkData.practiceLog[index])">
                 <v-icon small> mdi-delete </v-icon>
               </v-btn>
-            </template>
+            </template> -->
           </v-data-table>
         </div>
       </div>
@@ -161,6 +167,7 @@ export default defineComponent({
     console.log(adkData.value.practiceLog);
 
     // const minutes = ref('');
+    // console.log(adkData.defaultActivity.endEarlyActivity);
 
     const logIndex = ref(adkData.value.practiceLog.length - 1);
     // console.log(logIndex.value);
@@ -204,7 +211,7 @@ export default defineComponent({
 
         lengthPractice.value += 1;
       }
-      console.log(adkData.value.practiceLog);
+      // console.log(adkData.value.practiceLog);
       return new Promise((resolve, reject) => {
         studentDocument.value.update();
         resolve(true);

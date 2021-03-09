@@ -1,8 +1,8 @@
 export const HEADER = [
   { text: 'Minutes submitted', align: 'start', value: 'minutes', width: '20%' },
   { text: 'Team Member', align: 'start', value: 'name', width: '40%' },
-  { text: 'Timestamp', align: 'start', value: 'timestamp', width: '35%' },
-  { text: 'Delete', align: 'center', value: 'delete', sortable: false, width: '5%' }
+  { text: 'Timestamp', align: 'start', value: 'timestamp', width: '35%' }
+  // { text: 'Delete', align: 'center', value: 'delete', sortable: false, width: '5%' }
 ];
 
 export const items = [
