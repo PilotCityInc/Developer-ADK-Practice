@@ -177,9 +177,10 @@ export default defineComponent({
 
     function logMinutes() {
       // timestamp, figure out way to only display month, day, and time ex: Jul 12 at 8:10pm
-      let timestamp = new Date();
+      const timestamp = new Date();
       const unixtime = timestamp.valueOf();
-      timestamp = new Date(unixtime);
+      const date = new Date(unixtime).toLocaleDateString('en-us');
+      // console.log(date);
 
       const log = ref({
         minutes: '',
@@ -190,7 +191,7 @@ export default defineComponent({
       // console.log(`Minutes logged: ${minutes.value}`);
       // console.log(adkData.value.practiceLog);
       adkData.value.practiceLog.push(log.value);
-      adkData.value.practiceLog[logIndex.value].timestamp = timestamp;
+      adkData.value.practiceLog[logIndex.value].timestamp = date;
       adkData.value.practiceLog[
         logIndex.value
       ].name = `${studentDocument.value.data.firstName} ${studentDocument.value.data.lastName}`;
