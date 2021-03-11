@@ -29,6 +29,6 @@ extend('numeric', {
 });
 extend('min_value', {
   ...min_value,
-  message: 'value has to be greater than or equal to {min}'
+  message: 'More than {min} please =)'
 });
 export { ValidationObserver, ValidationProvider };

@@ -42,7 +42,7 @@
       buffer-value="100"
       stream
     />
-    <div class="module-edit__container">
+    <div>
       <div class="module-default__log-text">
         <validation-provider v-slot="{ errors }" slim rules="numeric|min_value:1|required">
           <v-text-field
@@ -148,7 +148,7 @@ export default defineComponent({
     const initPracticeDefault = {
       practiceLog: [
         {
-          minutes: '',
+          minutes: '0',
           timestamp: '',
           name: '',
           team: teamDocument.value.data.name
