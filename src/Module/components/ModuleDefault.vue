@@ -1,112 +1,114 @@
 <template>
   <ValidationObserver v-slot="{ invalid }" slim>
-  <v-container class="module-default pa-0">
-    <div class="module-default__instructions">
-      <v-expansion-panels v-model="showInstructions" class="module-default__instructions" flat>
-        <v-expansion-panel>
-          <v-expansion-panel-header
-            v-show="showInstructions"
-            hide-actions
-            class="pa-0"
-            @click="showInstructions = true"
-          >
-            <template v-slot="{ open }">
-              <v-scroll-y-transition hide-on-leave>
-                <div v-if="!open" class="d-flex flex-column justify-center">
-                  <v-icon color="grey lighten-2" class="d-flex justify-center">
-                    mdi-chevron-down
-                  </v-icon>
-                  <div color="grey lighten-2" class="module-default__collapse-title">
-                    INSTRUCTIONS
+    <v-container class="module-default pa-0">
+      <div class="module-default__instructions">
+        <v-expansion-panels v-model="showInstructions" class="module-default__instructions" flat>
+          <v-expansion-panel>
+            <v-expansion-panel-header
+              v-show="showInstructions"
+              hide-actions
+              class="pa-0"
+              @click="showInstructions = true"
+            >
+              <template v-slot="{ open }">
+                <v-scroll-y-transition hide-on-leave>
+                  <div v-if="!open" class="d-flex flex-column justify-center">
+                    <v-icon color="grey lighten-2" class="d-flex justify-center">
+                      mdi-chevron-down
+                    </v-icon>
+                    <div color="grey lighten-2" class="module-default__collapse-title">
+                      INSTRUCTIONS
+                    </div>
                   </div>
-                </div>
-              </v-scroll-y-transition>
-            </template>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <Instruct readonly />
-            <div @click="showInstructions = true">
-              <div class="module-default__collapse-title">CLOSE</div>
-              <!-- <div class="hr"/> OPTIONAL -->
-              <v-icon color="grey lighten-2" class="d-flex justify-center"> mdi-chevron-up </v-icon>
-            </div>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-    </div>
-    <v-progress-linear
-      class="module-default__collapse-divider"
-      color="#dedede"
-      height="2"
-      value="100"
-      buffer-value="100"
-      stream
-    />
-    <div>
-      <div class="module-default__log-text">
-        <validation-provider v-slot="{ errors }" slim rules="numeric|min_value:1|required">
-          <v-text-field
-            v-model="adkData.practiceLog[logIndex].minutes"
-            placeholder="0"
-            label="Enter Minutes"
-            class="module-default__text-field"
-            outlined
-            :error-messages="errors"
-          ></v-text-field>
-        </validation-provider>
+                </v-scroll-y-transition>
+              </template>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <Instruct readonly />
+              <div @click="showInstructions = true">
+                <div class="module-default__collapse-title">CLOSE</div>
+                <!-- <div class="hr"/> OPTIONAL -->
+                <v-icon color="grey lighten-2" class="d-flex justify-center">
+                  mdi-chevron-up
+                </v-icon>
+              </div>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
       </div>
-      <div class="module-default__log-btn-row">
-        <v-btn
-          x-large
-          outlined
-          class="module-default__log-btn"
-          depressed
-          :ripple="false"
-          :disabled="invalid"
-          @click="process"
-          >LOG MINUTES</v-btn
-        >
-      </div>
-      <div class="module-default__log-btn-row mt-3">
-        <v-btn v-if="adkData.practiceLog.length > 1" depressed color="#ffffff" small @click="undo"
-          ><v-icon left>mdi-undo</v-icon>Undo</v-btn
-        >
-      </div>
-      <div class="tableview__column mt-12">
-        <!-- <v-btn x-small outlined depressed class="mr-1 mb-2">Personal</v-btn> -->
-        <!-- <v-btn class="ml-1 mb-2" x-small outlined depressed>Team</v-btn> -->
-        <div class="tableview__total-log-title mt-6 b-2">Logged Time</div>
-        <div class="tableview__total-log mb-6">
-          {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
+      <v-progress-linear
+        class="module-default__collapse-divider"
+        color="#dedede"
+        height="2"
+        value="100"
+        buffer-value="100"
+        stream
+      />
+      <div>
+        <div class="module-default__log-text">
+          <validation-provider v-slot="{ errors }" slim rules="numeric|min_value:1|required">
+            <v-text-field
+              v-model="adkData.practiceLog[logIndex].minutes"
+              placeholder="0"
+              label="Enter Minutes"
+              class="module-default__text-field"
+              outlined
+              :error-messages="errors"
+            ></v-text-field>
+          </validation-provider>
         </div>
-        <!-- <div v-if="finalValueLog">
+        <div class="module-default__log-btn-row">
+          <v-btn
+            x-large
+            outlined
+            class="module-default__log-btn"
+            depressed
+            :ripple="false"
+            :disabled="invalid"
+            @click="process"
+            >LOG MINUTES</v-btn
+          >
+        </div>
+        <div class="module-default__log-btn-row mt-3">
+          <v-btn v-if="adkData.practiceLog.length > 1" depressed color="#ffffff" small @click="undo"
+            ><v-icon left>mdi-undo</v-icon>Undo</v-btn
+          >
+        </div>
+        <div class="tableview__column mt-12">
+          <!-- <v-btn x-small outlined depressed class="mr-1 mb-2">Personal</v-btn> -->
+          <!-- <v-btn class="ml-1 mb-2" x-small outlined depressed>Team</v-btn> -->
+          <div class="tableview__total-log-title mt-6 b-2">Logged Time</div>
+          <div class="tableview__total-log mb-6">
+            {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
+          </div>
+          <!-- <div v-if="finalValueLog">
           <div class="tableview__total-log-title mt-6 b-2">Required Time Left</div>
           <div class="tableview__total-log mb-6">
             {{ Math.floor(adkData.defaultActivity.endEarlyActivity * 60) - finalValueLog }}m
           </div>
         </div> -->
-        <div :key="tableRefresh">
-          <v-data-table
-            :headers="header"
-            :items="adkData.practiceLog"
-            sort-by="resource"
-            :items-per-page="100"
-            :hide-default-footer="true"
-          >
-            <!-- <template v-slot:item.delete>
+          <div :key="tableRefresh">
+            <v-data-table
+              :headers="header"
+              :items="adkData.practiceLog"
+              sort-by="resource"
+              :items-per-page="100"
+              :hide-default-footer="true"
+            >
+              <!-- <template v-slot:item.delete>
               <v-btn small icon depressed @click="deleteLog(adkData.practiceLog[index])">
                 <v-icon small> mdi-delete </v-icon>
               </v-btn>
             </template> -->
-          </v-data-table>
+            </v-data-table>
+          </div>
         </div>
-      </div>
 
-      <!-- ENTER CONTENT HERE -->
-      <!-- DESIGN YOUR ACTIVITY HERE / COMMENT OUT WHEN YOU'VE STARTED DESIGNING -->
-      <!-- <div class="module-default__none">Design your activity here</div> -->
-    </div>
-  </v-container>
+        <!-- ENTER CONTENT HERE -->
+        <!-- DESIGN YOUR ACTIVITY HERE / COMMENT OUT WHEN YOU'VE STARTED DESIGNING -->
+        <!-- <div class="module-default__none">Design your activity here</div> -->
+      </div>
+    </v-container>
   </ValidationObserver>
 </template>
 
@@ -357,12 +359,12 @@ export default defineComponent({
   }
   &__log-btn {
     &.v-btn:not(.v-btn--round).v-size--default {
-      min-height: 34px;
-      width: 150px;
+      // min-height: 34px;
+      // width: 150px;
     }
 
-    height: 100%;
-    width: 200px;
+    // height: 100%;
+    // width: 200px;
   }
 
   &__log-btn-row {
