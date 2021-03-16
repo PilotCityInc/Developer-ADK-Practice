@@ -42,7 +42,7 @@
       buffer-value="100"
       stream
     />
-    <div>
+    <div class="mt-12">
       <div class="module-default__log-text">
         <validation-provider v-slot="{ errors }" slim rules="numeric|min_value:1|required">
           <v-text-field
@@ -389,7 +389,7 @@ export default defineComponent({
 
   &__collapse-divider {
     margin-top: 15px;
-    margin-bottom: 75px;
+    // margin-bottom: 75px;
     margin-right: none;
     margin-left: none;
     padding-right: none;
