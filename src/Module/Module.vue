@@ -262,7 +262,7 @@ body {
 }
 </style>
 <script lang="ts">
-import { computed, reactive, ref, toRefs, defineComponent } from '@vue/composition-api';
+import { computed, reactive, ref, toRefs, defineComponent, PropType } from '@vue/composition-api';
 import '../styles/module.scss';
 // import { Collection } from 'mongodb';
 import { getModMongoDoc } from 'pcv4lib/src';
