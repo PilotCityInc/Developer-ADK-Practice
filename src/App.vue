@@ -4,6 +4,7 @@
       v-model="programDocStub"
       :student-doc="studentDoc"
       :team-doc="teamDoc"
+      :user-type="userTypeStub"
       @inputStudentDoc="studentDoc = $event"
       @inputTeamDoc="teamDoc = $event"
     />
@@ -73,9 +74,12 @@ export default defineComponent({
       },
       changeStream: {}
     });
+    const userTypeStub = 'organizer';
+
     return {
       programDocStub,
       studentDoc,
+      userTypeStub,
       teamDoc
     };
   }

@@ -3,7 +3,7 @@
   "license": "MIT",
   "main": "/dist/index.ts",
   "name": "developer-adk-practice",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "PilotCity Development Kit Template for creating your own Program Activities",
   "repository": {
     "type": "git",
@@ -19,9 +19,7 @@
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },
-  "peerDependencies": {
-    "@vue/composition-api": "^1.0.0-beta.15"
-  },
+  "peerDependencies": {},
   "dependencies": {
     "@mdi/font": "^3.6.95",
     "@rollup/plugin-buble": "^0.21.3",
