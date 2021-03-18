@@ -36,7 +36,14 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </div>
-    <v-progress-linear class="mt-3" color="#dedede" height="2" value="100" buffer-value="100" stream />
+      <v-progress-linear
+        class="mt-3"
+        color="#dedede"
+        height="2"
+        value="100"
+        buffer-value="100"
+        stream
+      />
       <div>
         <div class="module-default__log-text">
           <validation-provider v-slot="{ errors }" slim rules="numeric|min_value:1|required">
