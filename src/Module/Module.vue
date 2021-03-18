@@ -288,7 +288,7 @@ export default defineComponent({
       default: () => {}
     },
     teamDoc: {
-      required: true,
+      required: false,
       type: Object as PropType<MongoDoc | null>,
       default: () => {}
     },
@@ -302,7 +302,10 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
+    // if (props.teamDoc !== null) {
     const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
+    // return teamDocument;
+    // }
 
     // ENTER ACTIVITY NAME BELOW
     const moduleName = ref('Tinker');
