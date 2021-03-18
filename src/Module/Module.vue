@@ -237,7 +237,7 @@ body {
   height: 100%;
 }
 .v-timeline-item__divider {
-  align-items: start !important;
+  // align-items: start !important;
 }
 .module {
   &__trash {
