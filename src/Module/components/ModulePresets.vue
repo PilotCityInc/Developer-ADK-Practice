@@ -215,7 +215,7 @@ export default defineComponent({
     margin-top: 10px;
   }
   &__reflection {
-    margin-left: auto;
+    // margin-left: auto;
   }
   &__divider {
     margin-top: 40px;
