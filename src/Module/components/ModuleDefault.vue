@@ -157,7 +157,7 @@ export default defineComponent({
         }
       ]
     };
-    const { adkData } = getModAdk(
+    const { adkData, adkIndex } = getModAdk(
       props,
       ctx.emit,
       'Practice',
@@ -215,6 +215,14 @@ export default defineComponent({
         lengthPractice.value += 1;
       }
       // console.log(adkData.value.practiceLog);
+
+      // TODO: get the actual expected minimum log time. Maybe `adkData.defaultActivity.endEarlyActivity * 60`?
+      if (finalValueLog.value > 100) { 
+        adkData.value.update(() => ({
+          isComplete: true,
+          adkIndex: adkIndex
+        }))
+      }
       return new Promise((resolve, reject) => {
         studentDocument.value.update();
         resolve(true);
