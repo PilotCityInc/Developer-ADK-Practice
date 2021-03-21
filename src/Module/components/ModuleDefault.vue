@@ -51,7 +51,7 @@
               v-model="adkData.practiceLog[logIndex].minutes"
               placeholder="0"
               label="Enter Minutes"
-              class="module-default__text-field"
+              class="module-default__text-field2 mt-12"
               :readonly="userType === 'stakeholder'"
               outlined
               :error-messages="errors"
@@ -88,7 +88,7 @@
             {{ Math.floor(adkData.defaultActivity.endEarlyActivity * 60) - finalValueLog }}m
           </div>
         </div> -->
-          <div :key="tableRefresh">
+          <div :key="tableRefresh" class="pa-0">
             <v-data-table
               :headers="header"
               :items="adkData.practiceLog"
@@ -336,6 +336,10 @@ export default defineComponent({
     margin-right: auto;
     // max-height: 150px;
     // height: 150px !important;
+  }
+
+  &__text-field2 {
+    width: 150px;
   }
   &__text-field {
     &.v-input input {
