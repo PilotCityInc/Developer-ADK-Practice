@@ -342,8 +342,8 @@ export default defineComponent({
       max-height: none;
     }
     &.v-text-field--outlined > .v-input__control > .v-input__slot {
-      min-height: 150px;
-      min-width: 150px;
+      // min-height: 150px;
+      // min-width: 150px;
     }
     &.v-text-field--outlined .v-label {
       top: 22px;
