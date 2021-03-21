@@ -132,6 +132,13 @@ export default defineComponent({
       required: true,
       type: Object as PropType<MongoDoc>
     },
+    userType: {
+      required: true,
+      type: String,
+      // participant: '',
+      // organizer: '',
+      // stakeholder: ''
+    },
     studentDoc: {
       required: true,
       type: Object as PropType<MongoDoc | null>,
