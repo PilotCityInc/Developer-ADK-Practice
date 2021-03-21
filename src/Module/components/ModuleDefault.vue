@@ -52,6 +52,7 @@
               placeholder="0"
               label="Enter Minutes"
               class="module-default__text-field"
+              :readonly="userType === 'stakeholder'"
               outlined
               :error-messages="errors"
             ></v-text-field>
@@ -64,13 +65,13 @@
             class="module-default__log-btn"
             depressed
             :ripple="false"
-            :disabled="invalid"
+            :disabled="invalid || userType === 'stakeholder'"
             @click="process"
             >LOG MINUTES</v-btn
           >
         </div>
         <div class="module-default__log-btn-row mt-3">
-          <v-btn v-if="adkData.practiceLog.length > 1" depressed color="#ffffff" small @click="undo"
+          <v-btn :disabled="userType === 'stakeholder'" v-if="adkData.practiceLog.length > 1" depressed color="#ffffff" small @click="undo"
             ><v-icon left>mdi-undo</v-icon>Undo</v-btn
           >
         </div>

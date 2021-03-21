@@ -106,6 +106,7 @@
               v-model="studentDoc"
               :student-doc="studentDoc"
               :team-doc="teamDoc"
+              :user-type="userType"
               @inputStudentDoc="$emit('inputStudentDoc', $event)"
               @inputTeamDoc="$emit('inputTeamDoc', $event)"
             />
