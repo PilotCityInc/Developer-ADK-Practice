@@ -339,14 +339,14 @@ export default defineComponent({
   }
   &__text-field {
     &.v-input input {
-      max-height: none;
+      // max-height: none;
     }
     &.v-text-field--outlined > .v-input__control > .v-input__slot {
       // min-height: 150px;
       // min-width: 150px;
     }
     &.v-text-field--outlined .v-label {
-      top: 22px;
+      // top: 22px;
     }
 
     // &.v-text-field--filled > .v-input__control > .v-input__slot,
@@ -356,17 +356,17 @@ export default defineComponent({
     // }
     &.v-text-field {
       // width: 150px;
-      padding-top: 10px;
+      // padding-top: 10px;
     }
 
     &.v-input {
-      font-size: 50px;
-      font-weight: 700;
+      // font-size: 50px;
+      // font-weight: 700; 
     }
 
     &.v-input input {
       // max-height: none;
-      text-align: center;
+      // text-align: center;
     }
     // text-align: center !important;
     // font-family: Raleway;
