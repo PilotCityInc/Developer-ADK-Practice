@@ -71,7 +71,13 @@
           >
         </div>
         <div class="module-default__log-btn-row mt-3">
-          <v-btn :disabled="userType === 'stakeholder'" v-if="adkData.practiceLog.length > 1" depressed color="#ffffff" small @click="undo"
+          <v-btn
+            v-if="adkData.practiceLog.length > 1"
+            :disabled="userType === 'stakeholder'"
+            depressed
+            color="#ffffff"
+            small
+            @click="undo"
             ><v-icon left>mdi-undo</v-icon>Undo</v-btn
           >
         </div>
@@ -134,7 +140,7 @@ export default defineComponent({
     },
     userType: {
       required: true,
-      type: String,
+      type: String
       // participant: '',
       // organizer: '',
       // stakeholder: ''
@@ -225,11 +231,11 @@ export default defineComponent({
       // console.log(adkData.value.practiceLog);
 
       // TODO: get the actual expected minimum log time. Maybe `adkData.defaultActivity.endEarlyActivity * 60`?
-      if (finalValueLog.value > 100) { 
+      if (finalValueLog.value > 100) {
         adkData.value.update(() => ({
           isComplete: true,
-          adkIndex: adkIndex
-        }))
+          adkIndex
+        }));
       }
       return new Promise((resolve, reject) => {
         studentDocument.value.update();
@@ -339,7 +345,7 @@ export default defineComponent({
   }
 
   &__text-field2 {
-    width: 150px;
+    // width: 100px;
   }
   &__text-field {
     &.v-input input {
@@ -365,7 +371,7 @@ export default defineComponent({
 
     &.v-input {
       // font-size: 50px;
-      // font-weight: 700; 
+      // font-weight: 700;
     }
 
     &.v-input input {
