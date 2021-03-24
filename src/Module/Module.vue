@@ -103,12 +103,10 @@
           <keep-alive>
             <component
               :is="getComponent"
-              v-model="studentDoc"
-              :student-doc="studentDoc"
-              :team-doc="teamDoc"
+              :user-doc="userDoc"
+              :team-doc="teamDoc || { data: { adks: [] } }"
               :user-type="userType"
-              @inputStudentDoc="$emit('inputStudentDoc', $event)"
-              @inputTeamDoc="$emit('inputTeamDoc', $event)"
+              @inputTeamDoc="$emit(userType === 'participant' ? 'inputTeamDoc' : 'n', $event)"
             />
           </keep-alive>
         </div>
@@ -271,7 +269,7 @@ import * as Module from './components';
 import MongoDoc from './types';
 
 export default defineComponent({
-  name: 'ModuleName',
+  name: 'Practice',
   components: {
     'module-monitor': Module.Monitor,
     'module-setup': Module.Setup,
@@ -283,7 +281,7 @@ export default defineComponent({
       required: true,
       type: Object as PropType<MongoDoc>
     },
-    studentDoc: {
+    userDoc: {
       required: true,
       type: Object as PropType<MongoDoc | null>,
       default: () => {}
@@ -302,12 +300,6 @@ export default defineComponent({
     }
   },
   setup(props, ctx) {
-    const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
-    let teamDocument = null;
-    if (props.teamDoc) {
-      teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
-    }
-
     // ENTER ACTIVITY NAME BELOW
     const moduleName = ref('Tinker');
     const page = reactive({
@@ -376,9 +368,7 @@ export default defineComponent({
       getColor,
       ...toRefs(timelineData),
       timeline,
-      comment,
-      studentDocument,
-      teamDocument
+      comment
     };
   }
 });

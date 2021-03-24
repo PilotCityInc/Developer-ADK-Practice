@@ -134,10 +134,6 @@ export default defineComponent({
     Table
   },
   props: {
-    value: {
-      required: true,
-      type: Object as PropType<MongoDoc>
-    },
     userType: {
       required: true,
       type: String
@@ -145,9 +141,9 @@ export default defineComponent({
       // organizer: '',
       // stakeholder: ''
     },
-    studentDoc: {
+    userDoc: {
       required: true,
-      type: Object as PropType<MongoDoc | null>,
+      type: Object as PropType<MongoDoc>,
       default: () => {}
     },
     teamDoc: {
@@ -158,16 +154,14 @@ export default defineComponent({
     loggedNum: Number
   },
   setup(props, ctx) {
-    const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
     const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
-
     const initPracticeDefault = {
       practiceLog: [
         {
           minutes: '0',
           timestamp: '',
           name: '',
-          team: teamDocument.value.data.name
+          user_id: props.userDoc.data._id
         }
       ]
     };
@@ -176,11 +170,9 @@ export default defineComponent({
       ctx.emit,
       'Practice',
       initPracticeDefault,
-      'studentDoc',
+      'teamDoc',
       'inputStudentDoc'
     );
-
-    console.log(adkData.value.practiceLog);
 
     // const minutes = ref('');
     // console.log(adkData.defaultActivity.endEarlyActivity);
@@ -202,7 +194,7 @@ export default defineComponent({
         minutes: '',
         timestamp: '',
         name: '',
-        team: teamDocument.value.data.name
+        user_id: props.userDoc.data._id
       });
       // console.log(`Minutes logged: ${minutes.value}`);
       // console.log(adkData.value.practiceLog);
@@ -210,7 +202,7 @@ export default defineComponent({
       adkData.value.practiceLog[logIndex.value].timestamp = date;
       adkData.value.practiceLog[
         logIndex.value
-      ].name = `${studentDocument.value.data.firstName} ${studentDocument.value.data.lastName}`;
+      ].name = `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`;
       // console.log(adkData.value.practiceLog);
       // eslint-disable-next-line no-plusplus
       logIndex.value++;
@@ -238,7 +230,7 @@ export default defineComponent({
         }));
       }
       return new Promise((resolve, reject) => {
-        studentDocument.value.update();
+        props.userDoc.update();
         resolve(true);
       });
     }
@@ -248,7 +240,7 @@ export default defineComponent({
         minutes: '',
         timestamp: '',
         name: '',
-        team: teamDocument.value.data.name
+        user_id: props.userDoc.data._id
       });
       // eslint-disable-next-line no-plusplus
       if (adkData.value.practiceLog.length > 2) {
@@ -269,7 +261,7 @@ export default defineComponent({
         adkData.value.practiceLog.push(log.value);
         adkData.value.practiceLog[
           logIndex.value
-        ].name = `${studentDocument.value.data.firstName} ${studentDocument.value.data.lastName}`;
+        ].name = `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`;
         // eslint-disable-next-line no-plusplus
         logIndex.value++;
         tableRefresh.value += 1;
@@ -282,7 +274,7 @@ export default defineComponent({
         adkData.value.practiceLog.pop();
         adkData.value.practiceLog.pop();
         adkData.value.practiceLog.push(log.value);
-        // adkData.value.practiceLog[0].name = `${studentDocument.value.data.firstName} ${studentDocument.value.data.lastName}`;
+        // adkData.value.practiceLog[0].name = `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`;
         // eslint-disable-next-line no-plusplus
         logIndex.value++;
         tableRefresh.value += 1;
@@ -300,7 +292,6 @@ export default defineComponent({
     });
 
     return {
-      studentDocument,
       finalValueLog,
       // minutes,
       setupInstructions,

@@ -26,12 +26,12 @@
 </template>
 
 <script lang="ts">
-import { PropType, ref } from '@vue/composition-api';
+import { defineComponent, PropType, ref } from '@vue/composition-api';
 import { getModMongoDoc, getModAdk } from 'pcv4lib/src';
 import { items, HEADER } from './const';
 import MongoDoc from '../types';
 
-export default {
+export default defineComponent({
   name: 'TableView',
   props: {
     // eslint-disable-next-line vue/require-default-prop
@@ -80,7 +80,7 @@ export default {
       componentKey
     };
   }
-};
+});
 </script>
 
 <style lang="scss">

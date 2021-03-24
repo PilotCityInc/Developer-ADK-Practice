@@ -2,10 +2,9 @@
   <v-app>
     <Module
       v-model="programDocStub"
-      :student-doc="studentDoc"
+      :user-doc="userDoc"
       :team-doc="teamDoc"
       :user-type="userTypeStub"
-      @inputStudentDoc="studentDoc = $event"
       @inputTeamDoc="teamDoc = $event"
     />
   </v-app>
@@ -14,6 +13,7 @@
 <script lang="ts">
 // import ApolloExample from './components/ApolloExample.vue';
 import { defineComponent, Ref, ref } from '@vue/composition-api';
+import { ObjectId } from 'bson';
 import Module from './Module/Module.vue';
 import MongoDoc from './Module/types';
 
@@ -43,8 +43,9 @@ export default defineComponent({
       },
       changeStream: {}
     });
-    const studentDoc: Ref<MongoDoc> = ref({
+    const userDoc: Ref<MongoDoc> = ref({
       data: {
+        _id: new ObjectId(),
         firstName: 'Test First',
         lastName: 'Test Last',
         adks: []
@@ -59,9 +60,8 @@ export default defineComponent({
       },
       changeStream: {}
     });
-    const teamDoc: Ref<MongoDoc> = ref({
+    const teamDoc: Ref<MongoDoc | null> = ref({
       data: {
-        name: 'Team',
         adks: []
       },
       update: () => {
@@ -74,11 +74,12 @@ export default defineComponent({
       },
       changeStream: {}
     });
-    const userTypeStub = 'organizer';
+    const userTypeStub = 'participant';
+    if (userTypeStub === 'organizer') teamDoc.value = null;
 
     return {
       programDocStub,
-      studentDoc,
+      userDoc,
       userTypeStub,
       teamDoc
     };
