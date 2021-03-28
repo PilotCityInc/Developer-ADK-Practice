@@ -90,6 +90,7 @@ export default defineComponent({
     // display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: 100%;
   }
   &__total-log {
     font-family: Raleway;

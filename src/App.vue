@@ -75,7 +75,7 @@ export default defineComponent({
       changeStream: {}
     });
     const userTypeStub = 'participant';
-    if (userTypeStub === 'organizer') teamDoc.value = null;
+    if (userTypeStub === 'participant') teamDoc.value = null;
 
     return {
       programDocStub,

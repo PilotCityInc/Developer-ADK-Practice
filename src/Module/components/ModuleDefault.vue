@@ -45,21 +45,43 @@
         stream
       />
       <div>
-        <div class="module-default__log-text">
-          <validation-provider v-slot="{ errors }" slim rules="numeric|min_value:1|required">
-            <v-text-field
+        <div class="d-flex justify-center align-center">
+          <div>
+            <validation-provider v-slot="{ errors }" slim rules="numeric|min_value:1|required">
+              <!-- <v-input
               v-model="adkData.practiceLog[logIndex].minutes"
               placeholder="0"
               label="Enter Minutes"
-              class="module-default__text-field2 mt-12"
-              :readonly="userType === 'stakeholder'"
               outlined
               :error-messages="errors"
-            ></v-text-field>
-          </validation-provider>
+              class="module-default__minutes-log"
+            ></v-input> -->
+              <v-text-field
+                v-model="adkData.practiceLog[logIndex].minutes"
+                placeholder="0"
+                value="0"
+                label="Enter Minutes"
+                class="module-default__text-field2 mt-12"
+                :readonly="userType === 'stakeholder'"
+                outlined
+                :error-messages="errors"
+              ></v-text-field>
+            </validation-provider>
+          </div>
         </div>
         <div class="module-default__log-btn-row">
           <v-btn
+            v-if="userType !== 'stakeholder'"
+            x-large
+            outlined
+            class="module-default__log-btn"
+            depressed
+            :ripple="false"
+            :disabled="invalid"
+            @click="process"
+            >LOG MINUTES</v-btn
+          >
+          <!-- <v-btn
             x-large
             outlined
             class="module-default__log-btn"
@@ -68,7 +90,7 @@
             :disabled="invalid || userType === 'stakeholder'"
             @click="process"
             >LOG MINUTES</v-btn
-          >
+          > -->
         </div>
         <div class="module-default__log-btn-row mt-3">
           <v-btn
@@ -81,11 +103,11 @@
             ><v-icon left>mdi-undo</v-icon>Undo</v-btn
           >
         </div>
-        <div class="tableview__column mt-12">
+        <div class="pa-0 mt-12">
           <!-- <v-btn x-small outlined depressed class="mr-1 mb-2">Personal</v-btn>
           <v-btn class="ml-1 mb-2" x-small outlined depressed>Team</v-btn> -->
-          <div class="tableview__total-log-title mt-6 b-2">Logged Time</div>
-          <div class="tableview__total-log mb-6">
+          <div class="tableview__total-log-title mt-6 b-2 d-flex justify-center">Logged Time</div>
+          <div class="tableview__total-log mb-6 d-flex justify-center">
             {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
           </div>
           <div :key="tableRefresh" class="pa-0">
@@ -320,17 +342,45 @@ export default defineComponent({
 
 <style lang="scss">
 .module-default {
+  &__minutes-log {
+    width: 150px;
+    height: 150px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+  }
   &__log-text {
-    display: flex;
-    max-width: 200px;
-    margin-left: auto;
-    margin-right: auto;
+    // display: flex;
+    // max-width: 200px;
+    // margin-left: auto;
+    // margin-right: auto;
     // max-height: 150px;
     // height: 150px !important;
   }
 
   &__text-field2 {
     // width: 100px;
+    &.v-input__slot {
+      // width: 150px;
+      // height: 150px;
+    }
+    &.v-text-field--filled > .v-input__control > .v-input__slot,
+    .v-text-field--full-width > .v-input__control > .v-input__slot,
+    .v-text-field--outlined > .v-input__control > .v-input__slot {
+      // min-width: 150px;
+      // min-height: 150px;
+    }
+
+    &.v-text-field--outlined > .v-input__control > .v-input__slot {
+      width: 175px;
+      height: 175px;
+      font-family: 'Raleway';
+      font-size: 50px;
+      font-weight: 700;
+    }
+    &.v-input input {
+      max-height: none;
+      text-align: center;
+    }
   }
   &__text-field {
     &.v-input input {
@@ -369,9 +419,9 @@ export default defineComponent({
     // font-size: 50px;
   }
   &__log-btn {
+    // width: 150px;
     &.v-btn:not(.v-btn--round).v-size--default {
       // min-height: 34px;
-      // width: 150px;
     }
 
     // height: 100%;
