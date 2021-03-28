@@ -127,18 +127,22 @@ export default defineComponent({
     // Instruct
   },
   props: {
-    value: {
+    userType: {
       required: true,
-      type: Object as PropType<MongoDoc>
+      type: String
+      // participant: '',
+      // organizer: '',
+      // stakeholder: ''
     },
-    studentDoc: {
+    teamDoc: {
       required: true,
       type: Object as PropType<MongoDoc | null>,
       default: () => {}
     }
   },
   setup(props, ctx) {
-    const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
+    // const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
+    const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
 
     const initPracticePresets = {
       minimumHoursNow: '3 Hours',
@@ -156,8 +160,8 @@ export default defineComponent({
       ctx.emit,
       'Practice',
       initPracticePresets,
-      'studentDoc',
-      'inputStudentDoc'
+      'teamDoc',
+      'inputTeamDoc'
     );
 
     const presets = reactive({
@@ -171,7 +175,7 @@ export default defineComponent({
     function populate() {
       // console.log(studentDocument);
       return new Promise((resolve, reject) => {
-        studentDocument.value.update();
+        teamDocument.value.update();
         resolve(true);
       });
     }
@@ -188,7 +192,8 @@ export default defineComponent({
     return {
       minuteCheck,
       setupInstructions,
-      studentDocument,
+      // studentDocument,
+      teamDocument,
       adkData,
       ...toRefs(presets),
       ...loading(populate, 'Saved Successfully', 'Could not save at this time')

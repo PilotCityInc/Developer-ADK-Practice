@@ -82,18 +82,12 @@
           >
         </div>
         <div class="tableview__column mt-12">
-          <!-- <v-btn x-small outlined depressed class="mr-1 mb-2">Personal</v-btn> -->
-          <!-- <v-btn class="ml-1 mb-2" x-small outlined depressed>Team</v-btn> -->
+          <!-- <v-btn x-small outlined depressed class="mr-1 mb-2">Personal</v-btn>
+          <v-btn class="ml-1 mb-2" x-small outlined depressed>Team</v-btn> -->
           <div class="tableview__total-log-title mt-6 b-2">Logged Time</div>
           <div class="tableview__total-log mb-6">
             {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
           </div>
-          <!-- <div v-if="finalValueLog">
-          <div class="tableview__total-log-title mt-6 b-2">Required Time Left</div>
-          <div class="tableview__total-log mb-6">
-            {{ Math.floor(adkData.defaultActivity.endEarlyActivity * 60) - finalValueLog }}m
-          </div>
-        </div> -->
           <div :key="tableRefresh" class="pa-0">
             <v-data-table
               :headers="header"
@@ -171,7 +165,7 @@ export default defineComponent({
       'Practice',
       initPracticeDefault,
       'teamDoc',
-      'inputStudentDoc'
+      'inputTeamDoc'
     );
 
     // const minutes = ref('');
@@ -219,11 +213,11 @@ export default defineComponent({
         finalValueLog.value += parseInt(adkData.value.practiceLog[lengthPractice.value].minutes);
 
         lengthPractice.value += 1;
+        // console.log(finalValueLog.value)
       }
-      // console.log(adkData.value.practiceLog);
 
       // TODO: get the actual expected minimum log time. Maybe `adkData.defaultActivity.endEarlyActivity * 60`?
-      if (finalValueLog.value > 100) {
+      if (finalValueLog.value >= adkData.value.minimumHoursNow * 60) {
         adkData.value.update(() => ({
           isComplete: true,
           adkIndex
