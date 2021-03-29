@@ -74,7 +74,7 @@ export default defineComponent({
       },
       changeStream: {}
     });
-    const userTypeStub = 'participant';
+    const userTypeStub = 'organizer';
     if (userTypeStub === 'organizer') teamDoc.value = null;
 
     return {

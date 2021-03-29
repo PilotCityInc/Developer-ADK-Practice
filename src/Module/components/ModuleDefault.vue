@@ -178,7 +178,8 @@ export default defineComponent({
           name: '',
           user_id: props.userDoc.data._id
         }
-      ]
+      ],
+      minimumHoursNow: 3
     };
     const { adkData, adkIndex } = getModAdk(
       props,
@@ -239,15 +240,12 @@ export default defineComponent({
 
       // TODO: get the actual expected minimum log time. Maybe `adkData.defaultActivity.endEarlyActivity * 60`?
       if (finalValueLog.value >= adkData.value.minimumHoursNow * 60) {
-        adkData.value.update(() => ({
+        props.teamDoc?.update(() => ({
           isComplete: true,
           adkIndex
         }));
       }
-      return new Promise((resolve, reject) => {
-        props.userDoc.update();
-        resolve(true);
-      });
+      return props.teamDoc?.update();
     }
 
     function undo() {
