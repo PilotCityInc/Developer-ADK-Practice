@@ -69,9 +69,8 @@
             </validation-provider>
           </div>
         </div>
-        <div class="module-default__log-btn-row">
+        <div class="d-flex justify-center align-center">
           <v-btn
-            v-if="userType !== 'stakeholder'"
             x-large
             outlined
             class="module-default__log-btn"
@@ -419,7 +418,7 @@ export default defineComponent({
     // font-size: 50px;
   }
   &__log-btn {
-    // width: 150px;
+    width: 175px;
     &.v-btn:not(.v-btn--round).v-size--default {
       // min-height: 34px;
     }
