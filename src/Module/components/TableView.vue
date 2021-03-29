@@ -10,7 +10,7 @@
       <v-data-table
         :key="componentKey"
         :headers="header"
-        :items="studentAdkData.practiceLog"
+        :items="AdkData.practiceLog"
         sort-by="resource"
         :items-per-page="100"
         :hide-default-footer="true"
@@ -56,16 +56,16 @@ export default defineComponent({
 
     // console.log(studentDocument.value.data.adks);
 
-    const { adkData: studentAdkData } = getModAdk(
+    const { adkData: AdkData } = getModAdk(
       props,
       ctx.emit,
       'Practice',
       {},
-      'studentDoc',
-      'inputStudentDoc'
+      'teamDoc',
+      'inputTeamDoc'
     );
 
-    console.log(studentAdkData.value.practiceLog);
+    console.log(AdkData.value.practiceLog);
 
     const componentKey = ref(0);
 
@@ -75,7 +75,7 @@ export default defineComponent({
       header: ref(HEADER),
       items: ref(items),
       studentDocument,
-      studentAdkData,
+      AdkData,
       teamDocument,
       componentKey
     };
@@ -90,6 +90,7 @@ export default defineComponent({
     // display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: 100%;
   }
   &__total-log {
     font-family: Raleway;

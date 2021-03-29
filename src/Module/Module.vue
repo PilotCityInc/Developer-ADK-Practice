@@ -13,7 +13,7 @@
         >00:00:00</v-btn
       > -->
       <v-btn
-        v-if="currentPage != 'preview'"
+        v-if="currentPage != 'preview' && userType === 'organizer'"
         class="module__navbar-button font-weight-bold"
         outlined
         small
@@ -23,7 +23,7 @@
         >Preview</v-btn
       >
       <v-btn
-        v-if="currentPage == 'preview'"
+        v-if="currentPage == 'preview' && userType === 'organizer'"
         class="module__navbar-button font-weight-bold"
         dark
         small
