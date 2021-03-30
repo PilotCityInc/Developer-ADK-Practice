@@ -46,7 +46,7 @@
       />
       <v-container class="pa-0">
         <div class="d-flex flex-column justify-center align-center">
-          <div>
+          <div class="d-flex justify-center">
             <validation-provider v-slot="{}" slim rules="numeric|min_value:1|required">
               <!-- <v-input
               v-model="adkData.practiceLog[logIndex].minutes"
@@ -68,7 +68,7 @@
               ></v-text-field>
             </validation-provider>
           </div>
-          <div>
+          <div class="d-flex justify-center">
             <v-btn
               x-large
               outlined
@@ -91,7 +91,7 @@
             >LOG MINUTES</v-btn
             > -->
           </div>
-          <div>
+          <div class="d-flex justify-center">
             <v-btn
               v-if="adkData.practiceLog.length > 1"
               :disabled="userType === 'stakeholder'"
