@@ -47,7 +47,7 @@
       <v-container class="pa-0">
         <div class="d-flex flex-column justify-center align-center">
           <div class="d-flex justify-center">
-            <validation-provider v-slot="{}" slim rules="numeric|min_value:1|required">
+            <validation-provider v-slot="{ errors }" slim rules="numeric|min_value:1|required">
               <!-- <v-input
               v-model="adkData.practiceLog[logIndex].minutes"
               placeholder="0"
@@ -59,12 +59,12 @@
               <v-text-field
                 v-model="adkData.practiceLog[logIndex].minutes"
                 placeholder="0"
-                value="0"
                 hide-details
                 label="Enter Minutes"
                 class="module-default__text-field2 mt-12"
                 :readonly="userType === 'stakeholder'"
                 outlined
+                :error-messages="errors"
               ></v-text-field>
             </validation-provider>
           </div>
@@ -72,7 +72,7 @@
             <v-btn
               x-large
               outlined
-              class="module-default__log-btn mt-5"
+              class="module-default__log-btn2 mt-5"
               depressed
               :ripple="false"
               :disabled="invalid"
@@ -417,7 +417,7 @@ export default defineComponent({
     // font-weight: 800;
     // font-size: 50px;
   }
-  &__log-btn {
+  &__log-btn2 {
     width: 175px;
     &.v-btn:not(.v-btn--round).v-size--default {
       // min-height: 34px;
