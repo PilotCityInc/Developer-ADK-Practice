@@ -209,7 +209,7 @@ export default defineComponent({
       // console.log(date);
 
       const log = ref({
-        minutes: '',
+        minutes: '0',
         timestamp: '',
         name: '',
         user_id: props.userDoc.data._id
