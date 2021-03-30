@@ -44,10 +44,10 @@
         buffer-value="100"
         stream
       />
-      <div>
-        <div class="d-flex justify-center align-center">
+      <v-container class="pa-0">
+        <div class="d-flex flex-column justify-center align-center">
           <div>
-            <validation-provider v-slot="{ errors }" slim rules="numeric|min_value:1|required">
+            <validation-provider v-slot="{}" slim rules="numeric|min_value:1|required">
               <!-- <v-input
               v-model="adkData.practiceLog[logIndex].minutes"
               placeholder="0"
@@ -60,27 +60,27 @@
                 v-model="adkData.practiceLog[logIndex].minutes"
                 placeholder="0"
                 value="0"
+                hide-details
                 label="Enter Minutes"
                 class="module-default__text-field2 mt-12"
                 :readonly="userType === 'stakeholder'"
                 outlined
-                :error-messages="errors"
               ></v-text-field>
             </validation-provider>
           </div>
-        </div>
-        <div class="d-flex justify-center align-center">
-          <v-btn
-            x-large
-            outlined
-            class="module-default__log-btn"
-            depressed
-            :ripple="false"
-            :disabled="invalid"
-            @click="process"
-            >LOG MINUTES</v-btn
-          >
-          <!-- <v-btn
+          <div>
+            <v-btn
+              x-large
+              outlined
+              class="module-default__log-btn mt-5"
+              depressed
+              :ripple="false"
+              :disabled="invalid"
+              @click="process"
+            >
+              LOG MINUTES
+            </v-btn>
+            <!-- <v-btn
             x-large
             outlined
             class="module-default__log-btn"
@@ -89,18 +89,20 @@
             :disabled="invalid || userType === 'stakeholder'"
             @click="process"
             >LOG MINUTES</v-btn
-          > -->
-        </div>
-        <div class="module-default__log-btn-row mt-3">
-          <v-btn
-            v-if="adkData.practiceLog.length > 1"
-            :disabled="userType === 'stakeholder'"
-            depressed
-            color="#ffffff"
-            small
-            @click="undo"
-            ><v-icon left>mdi-undo</v-icon>Undo</v-btn
-          >
+            > -->
+          </div>
+          <div>
+            <v-btn
+              v-if="adkData.practiceLog.length > 1"
+              :disabled="userType === 'stakeholder'"
+              depressed
+              class="mt-2"
+              color="#ffffff"
+              small
+              @click="undo"
+              ><v-icon left>mdi-undo</v-icon>Undo</v-btn
+            >
+          </div>
         </div>
         <div class="pa-0 mt-12">
           <!-- <v-btn x-small outlined depressed class="mr-1 mb-2">Personal</v-btn>
@@ -129,7 +131,7 @@
         <!-- ENTER CONTENT HERE -->
         <!-- DESIGN YOUR ACTIVITY HERE / COMMENT OUT WHEN YOU'VE STARTED DESIGNING -->
         <!-- <div class="module-default__none">Design your activity here</div> -->
-      </div>
+      </v-container>
     </v-container>
   </ValidationObserver>
 </template>

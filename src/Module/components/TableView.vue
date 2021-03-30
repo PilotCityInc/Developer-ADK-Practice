@@ -94,7 +94,7 @@ export default defineComponent({
   }
   &__total-log {
     font-family: Raleway;
-    font-size: 30px;
+    font-size: 36px;
     font-weight: 800;
   }
   &__total-log-title {

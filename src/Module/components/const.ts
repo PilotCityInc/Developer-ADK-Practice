@@ -1,7 +1,7 @@
 export const HEADER = [
-  { text: 'Team Member', align: 'start', value: 'name', width: '40%' },
-  { text: 'Minutes Logged', align: 'start', value: 'minutes', width: '30%' },
-  { text: 'Timestamp', align: 'start', value: 'timestamp', width: '30%' }
+  { text: 'Logged Minutes', align: 'start', value: 'minutes', width: '25%' },
+  { text: 'Team Member', align: 'start', value: 'name', width: '50%' },
+  { text: 'Timestamp', align: 'start', value: 'timestamp', width: '35%' }
   // { text: 'Delete', align: 'center', value: 'delete', sortable: false, width: '5%' }
 ];
 
