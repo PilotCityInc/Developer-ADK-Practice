@@ -115,7 +115,7 @@
             <v-data-table
               :headers="header"
               :items="adkData.practiceLog"
-              sort-by="resource"
+              sort-by="timestamp"
               :items-per-page="100"
               :hide-default-footer="true"
             >
