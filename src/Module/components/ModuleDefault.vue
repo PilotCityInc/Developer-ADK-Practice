@@ -132,7 +132,7 @@
               <div :key="tableRefresh" class="pa-0">
                 <v-data-table
                   :headers="header"
-                  :items="tableItems"
+                  :items="adkData.practiceLog"
                   sort-by="time-stamp"
                   :items-per-page="100"
                   :hide-default-footer="true"
