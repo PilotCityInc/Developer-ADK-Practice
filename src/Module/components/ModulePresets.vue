@@ -172,10 +172,13 @@ export default defineComponent({
       minimumHours
     });
 
+    // console.log(teamDocument.value);
+
     function populate() {
-      // console.log(studentDocument);
+      // console.log(adkData.value.minimumHoursNow);
       return new Promise((resolve, reject) => {
         teamDocument.value.update();
+
         resolve(true);
       });
     }

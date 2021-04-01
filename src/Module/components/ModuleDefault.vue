@@ -57,7 +57,7 @@
               class="module-default__minutes-log"
             ></v-input> -->
               <v-text-field
-                v-model="adkData.practiceLog[logIndex].minutes"
+                v-model="minutes"
                 placeholder="0"
                 hide-details
                 label="Enter Minutes"
@@ -93,7 +93,7 @@
           </div>
           <div class="d-flex justify-center">
             <v-btn
-              v-if="adkData.practiceLog.length > 1"
+              v-if="adkData.practiceLog.length > 0"
               :disabled="userType === 'stakeholder'"
               depressed
               class="mt-2"
@@ -173,15 +173,8 @@ export default defineComponent({
   setup(props, ctx) {
     const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
     const initPracticeDefault = {
-      practiceLog: [
-        {
-          minutes: '0',
-          timestamp: '',
-          name: '',
-          user_id: props.userDoc.data._id
-        }
-      ],
-      minimumHoursNow: 3
+      practiceLog: []
+      // minimumHoursNow: '3 Hours'
     };
     const { adkData, adkIndex } = getModAdk(
       props,
@@ -192,14 +185,31 @@ export default defineComponent({
       'inputTeamDoc'
     );
 
-    // const minutes = ref('');
-    // console.log(adkData.defaultActivity.endEarlyActivity);
+    const minutes = ref('');
+    console.log(adkData.value.practiceLog);
 
     const logIndex = ref(adkData.value.practiceLog.length - 1);
     // console.log(logIndex.value);
     const lengthPractice = ref(0);
     const tableRefresh = ref(0);
     const finalValueLog = ref(0);
+
+    if (adkData.value.practiceLog.length > 0) {
+      while (lengthPractice.value <= adkData.value.practiceLog.length) {
+        // console.log(adkData.value.practiceLog[lengthPractice.value].minutes);
+        // eslint-disable-next-line radix
+        finalValueLog.value += parseInt(adkData.value.practiceLog[lengthPractice.value].minutes);
+
+        lengthPractice.value += 1;
+        // console.log(finalValueLog.value)
+      }
+    }
+
+    // console.log(adkData.value.minimumHoursNow);
+    // eslint-disable-next-line radix
+    console.log(adkData.value.minimumHoursNow);
+    // eslint-disable-next-line radix
+    console.log(parseInt(adkData.value.minimumHoursNow) * 60);
 
     function logMinutes() {
       // timestamp, figure out way to only display month, day, and time ex: Jul 12 at 8:10pm
@@ -209,19 +219,22 @@ export default defineComponent({
       // console.log(date);
 
       const log = ref({
-        minutes: '0',
-        timestamp: '',
-        name: '',
+        minutes: minutes.value,
+        timestamp: date,
+        name: `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`,
+        // eslint-disable-next-line @typescript-eslint/camelcase
         user_id: props.userDoc.data._id
       });
       // console.log(`Minutes logged: ${minutes.value}`);
       // console.log(adkData.value.practiceLog);
       adkData.value.practiceLog.push(log.value);
-      adkData.value.practiceLog[logIndex.value].timestamp = date;
-      adkData.value.practiceLog[
-        logIndex.value
-      ].name = `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`;
-      // console.log(adkData.value.practiceLog);
+      // adkData.value.practiceLog[logIndex.value].timestamp = date;
+      // adkData.value.practiceLog[
+      //   logIndex.value
+      // ].name = `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`;
+      // adkData.value.practiceLog[logIndex.value].minutes = minutes.value;
+      minutes.value = '';
+      console.log(adkData.value.practiceLog);
       // eslint-disable-next-line no-plusplus
       logIndex.value++;
 
@@ -231,7 +244,7 @@ export default defineComponent({
       finalValueLog.value = 0;
       tableRefresh.value += 1;
 
-      while (lengthPractice.value <= logIndex.value - 1) {
+      while (lengthPractice.value <= adkData.value.practiceLog.length) {
         // console.log(adkData.value.practiceLog[lengthPractice.value].minutes);
         // eslint-disable-next-line radix
         finalValueLog.value += parseInt(adkData.value.practiceLog[lengthPractice.value].minutes);
@@ -241,7 +254,8 @@ export default defineComponent({
       }
 
       // TODO: get the actual expected minimum log time. Maybe `adkData.defaultActivity.endEarlyActivity * 60`?
-      if (finalValueLog.value >= adkData.value.minimumHoursNow * 60) {
+      // eslint-disable-next-line radix
+      if (finalValueLog.value >= parseInt(adkData.value.minimumHoursNow) * 60) {
         props.teamDoc?.update(() => ({
           isComplete: true,
           adkIndex
@@ -251,49 +265,63 @@ export default defineComponent({
     }
 
     function undo() {
-      const log = ref({
-        minutes: '',
-        timestamp: '',
-        name: '',
-        user_id: props.userDoc.data._id
-      });
+      // const log = ref({
+      //   minutes: '',
+      //   timestamp: '',
+      //   name: '',
+      //   user_id: props.userDoc.data._id
+      // });
       // eslint-disable-next-line no-plusplus
-      if (adkData.value.practiceLog.length > 2) {
-        logIndex.value -= 2;
+      if (adkData.value.practiceLog.length > 0) {
+        logIndex.value -= 1;
 
         // console.log(adkData.value.practiceLog[adkData.value.practiceLog.length - 2].minutes);
         // eslint-disable-next-line radix
         finalValueLog.value -= parseInt(
-          adkData.value.practiceLog[adkData.value.practiceLog.length - 2].minutes
+          adkData.value.practiceLog[adkData.value.practiceLog.length - 1].minutes
         );
         // console.log(finalValueLog.value);
 
         adkData.value.practiceLog.pop();
-        adkData.value.practiceLog.pop();
+        // adkData.value.practiceLog.pop();
 
         // console.log(adkData.value.practiceLog);
 
-        adkData.value.practiceLog.push(log.value);
-        adkData.value.practiceLog[
-          logIndex.value
-        ].name = `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`;
+        // adkData.value.practiceLog.push(log.value);
+        // adkData.value.practiceLog[
+        //   logIndex.value
+        // ].name = `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`;
         // eslint-disable-next-line no-plusplus
-        logIndex.value++;
+        // logIndex.value++;
         tableRefresh.value += 1;
+        // eslint-disable-next-line radix
+        if (finalValueLog.value >= parseInt(adkData.value.minimumHoursNow) * 60) {
+          props.teamDoc?.update(() => ({
+            isComplete: true,
+            adkIndex
+          }));
+        }
       } else {
         // eslint-disable-next-line radix
         finalValueLog.value -= parseInt(
-          adkData.value.practiceLog[adkData.value.practiceLog.length - 2].minutes
+          adkData.value.practiceLog[adkData.value.practiceLog.length - 1].minutes
         );
-        logIndex.value -= 2;
+        logIndex.value -= 1;
         adkData.value.practiceLog.pop();
-        adkData.value.practiceLog.pop();
-        adkData.value.practiceLog.push(log.value);
+        // adkData.value.practiceLog.pop();
+        // adkData.value.practiceLog.push(log.value);
         // adkData.value.practiceLog[0].name = `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`;
         // eslint-disable-next-line no-plusplus
-        logIndex.value++;
+        // logIndex.value++;
         tableRefresh.value += 1;
         // console.log('last log');
+        // eslint-disable-next-line radix
+        if (finalValueLog.value >= parseInt(adkData.value.minimumHoursNow) * 60) {
+          props.teamDoc?.update(() => ({
+            isComplete: true,
+            adkIndex
+          }));
+        }
       }
     }
 
@@ -320,22 +348,10 @@ export default defineComponent({
       items,
       header: ref(HEADER),
       tableRefresh,
-      deleteLog
+      deleteLog,
+      minutes
     };
   }
-  // setup() {
-  //   const logMinutes = ref('');
-  //   const setupInstructions = ref({
-  //     description: '',
-  //     instructions: ['', '', '']
-  //   });
-  //   const showInstructions = ref(true);
-  //   return {
-  //     setupInstructions,
-  //     showInstructions,
-  //     logMinutes
-  //   };
-  // }
 });
 </script>
 
