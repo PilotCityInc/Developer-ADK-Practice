@@ -26,10 +26,6 @@ export default defineComponent({
   setup() {
     const programDocStub: Ref<MongoDoc> = ref({
       data: {
-        // firstName: 'me',
-        // lastName: 'test',
-        // _id: new ObjectId(1),
-        // team: null as null | ObjectId,
         adks: []
       },
       update: () => {
@@ -62,7 +58,19 @@ export default defineComponent({
     });
     const teamDoc: Ref<MongoDoc | null> = ref({
       data: {
-        adks: []
+        adks: [
+          {
+            name: 'Practice',
+            practiceLog: [
+              {
+                minutes: 10,
+                timestamp: new Date(),
+                name: 'teammate name',
+                user_id: new ObjectId(2)
+              }
+            ]
+          }
+        ]
       },
       update: () => {
         return new Promise((resolve, reject) => {
@@ -75,8 +83,7 @@ export default defineComponent({
       changeStream: {}
     });
     const userTypeStub = 'organizer';
-    if (userTypeStub === 'organizer') teamDoc.value = null;
-
+    // if (userTypeStub === 'organizer') teamDoc.value = null;
     return {
       programDocStub,
       userDoc,

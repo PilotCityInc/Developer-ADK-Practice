@@ -103,6 +103,7 @@
           <keep-alive>
             <component
               :is="getComponent"
+              v-model="programDoc"
               :user-doc="userDoc"
               :team-doc="teamDoc || { data: { adks: [] } }"
               :user-type="userType"
@@ -301,6 +302,22 @@ export default defineComponent({
   },
   setup(props, ctx) {
     // ENTER ACTIVITY NAME BELOW
+    const programDoc = computed({
+      get: () => props.value,
+      set: newVal => {
+        ctx.emit('input', newVal);
+      }
+    });
+
+    const index = programDoc.value.data.adks.findIndex(function findOfferObj(obj) {
+      return obj.name === 'practice';
+    });
+    if (index === -1) {
+      const initPractice = {
+        name: 'practice'
+      };
+      programDoc.value.data.adks.push(initPractice);
+    }
     const moduleName = ref('Tinker');
     const page = reactive({
       subpages: ['Setup', 'Presets'],
@@ -368,7 +385,8 @@ export default defineComponent({
       getColor,
       ...toRefs(timelineData),
       timeline,
-      comment
+      comment,
+      programDoc
     };
   }
 });

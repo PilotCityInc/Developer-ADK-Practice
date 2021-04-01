@@ -11,7 +11,7 @@
         <!-- <div class="presets__section-title">Minimum practice minutes before unlock</div> -->
         <validation-provider v-slot="{ errors }" slim rules="required">
           <v-select
-            v-model="adkData.minimumHoursNow"
+            v-model="programDoc.data.adks[index].minimumHoursNow"
             label="Minimum logged hours"
             :error-messages="errors"
             :items="minimumHours"
@@ -28,7 +28,7 @@
               rounded
               depressed
               :loading="loading"
-              @click="process()"
+              @click="process"
               >Save</v-btn
             >
           </div>
@@ -114,8 +114,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, toRefs, reactive, ref } from '@vue/composition-api';
-import { loading, getModAdk, getModMongoDoc } from 'pcv4lib/src';
+import { defineComponent, PropType, toRefs, reactive, ref, computed } from '@vue/composition-api';
+import { loading } from 'pcv4lib/src';
 // import Instruct from './ModuleInstruct.vue';
 import { group, required, deliverable, endEarly, minimumHours } from './const';
 import MongoDoc from '../types';
@@ -127,22 +127,35 @@ export default defineComponent({
     // Instruct
   },
   props: {
-    userType: {
+    value: {
       required: true,
-      type: String
-      // participant: '',
-      // organizer: '',
-      // stakeholder: ''
-    },
-    teamDoc: {
-      required: true,
-      type: Object as PropType<MongoDoc | null>,
-      default: () => {}
+      type: Object as PropType<MongoDoc>
     }
+    // userType: {
+    //   required: true,
+    //   type: String
+    //   // participant: '',
+    //   // organizer: '',
+    //   // stakeholder: ''
+    // },
+    // teamDoc: {
+    //   required: true,
+    //   type: Object as PropType<MongoDoc | null>,
+    //   default: () => {}
+    // }
   },
   setup(props, ctx) {
-    // const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
-    const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
+    // const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
+    const programDoc = computed({
+      get: () => props.value,
+      set: newVal => {
+        ctx.emit('input', newVal);
+      }
+    });
+
+    const index = programDoc.value.data.adks.findIndex(function findOfferObj(obj) {
+      return obj.name === 'practice';
+    });
 
     const initPracticePresets = {
       minimumHoursNow: '3 Hours',
@@ -154,15 +167,10 @@ export default defineComponent({
         required: false
       }
     };
-
-    const { adkData } = getModAdk(
-      props,
-      ctx.emit,
-      'Practice',
-      initPracticePresets,
-      'teamDoc',
-      'inputTeamDoc'
-    );
+    programDoc.value.data.adks[index] = {
+      ...initPracticePresets,
+      ...programDoc.value.data.adks[index]
+    };
 
     const presets = reactive({
       group,
@@ -174,17 +182,17 @@ export default defineComponent({
 
     // console.log(teamDocument.value);
 
-    function populate() {
-      // console.log(adkData.value.minimumHoursNow);
+    function save() {
+      console.log(programDoc.value.data.adks[index].minimumHoursNow);
       return new Promise((resolve, reject) => {
-        teamDocument.value.update();
+        programDoc.value.update();
 
         resolve(true);
       });
     }
 
     function minuteCheck() {
-      console.log(adkData.value.minimumHoursNow);
+      console.log(programDoc.value.data.adks[index].minimumHoursNow);
     }
 
     const setupInstructions = ref({
@@ -196,10 +204,13 @@ export default defineComponent({
       minuteCheck,
       setupInstructions,
       // studentDocument,
-      teamDocument,
-      adkData,
+      // teamDocument,
+      // adkData,
       ...toRefs(presets),
-      ...loading(populate, 'Saved Successfully', 'Could not save at this time')
+      ...loading(save, 'Saved Successfully', 'Could not save at this time'),
+      index,
+      programDoc,
+      save
     };
   }
   // setup() {

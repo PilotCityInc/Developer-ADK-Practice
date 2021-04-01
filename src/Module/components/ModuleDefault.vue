@@ -132,7 +132,7 @@
               <div :key="tableRefresh" class="pa-0">
                 <v-data-table
                   :headers="header"
-                  :items="adkData.practiceLog"
+                  :items="tableItems"
                   sort-by="time-stamp"
                   :items-per-page="100"
                   :hide-default-footer="true"
@@ -172,6 +172,10 @@ export default defineComponent({
     Table
   },
   props: {
+    value: {
+      required: true,
+      type: Object as PropType<MongoDoc>
+    },
     userType: {
       required: true,
       type: String
@@ -192,12 +196,23 @@ export default defineComponent({
     loggedNum: Number
   },
   setup(props, ctx) {
+    const programDoc = computed({
+      get: () => props.value,
+      set: newVal => {
+        ctx.emit('input', newVal);
+      }
+    });
+
+    const index = programDoc.value.data.adks.findIndex(function findOfferObj(obj) {
+      return obj.name === 'practice';
+    });
+
     const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
     const initPracticeDefault = {
-      practiceLog: [],
-      minimumHoursNow: '3 Hours'
+      practiceLog: []
+      // minimumHoursNow: '3 Hours'
     };
-    const { adkData, adkIndex } = getModAdk(
+    const { adkData: teamAdkData, adkIndex } = getModAdk(
       props,
       ctx.emit,
       'Practice',
@@ -207,7 +222,8 @@ export default defineComponent({
     );
 
     const minutes = ref();
-    console.log(adkData.value.practiceLog);
+    const adkData = ref(teamAdkData.value);
+    // console.log(adkData.value.practiceLog);
 
     const logIndex = ref(adkData.value.practiceLog.length - 1);
     // console.log(logIndex.value);
@@ -216,7 +232,7 @@ export default defineComponent({
     const finalValueLog = ref(0);
 
     if (adkData.value.practiceLog.length > 0) {
-      while (lengthPractice.value <= adkData.value.practiceLog.length) {
+      while (lengthPractice.value < adkData.value.practiceLog.length) {
         // console.log(adkData.value.practiceLog[lengthPractice.value].minutes);
         // eslint-disable-next-line radix
         finalValueLog.value += parseInt(adkData.value.practiceLog[lengthPractice.value].minutes);
@@ -225,12 +241,6 @@ export default defineComponent({
         // console.log(finalValueLog.value)
       }
     }
-
-    // console.log(adkData.value.minimumHoursNow);
-    // eslint-disable-next-line radix
-    console.log(adkData.value.minimumHoursNow);
-    // eslint-disable-next-line radix
-    console.log(parseInt(adkData.value.minimumHoursNow) * 60);
 
     function logMinutes() {
       // timestamp, figure out way to only display month, day, and time ex: Jul 12 at 8:10pm
@@ -249,7 +259,7 @@ export default defineComponent({
       // console.log(props.userDoc.data._id);
       // eslint-disable-next-line no-plusplus
       adkData.value.practiceLog.push(log.value);
-      console.log(adkData.value.practiceLog);
+      // console.log(adkData.value.practiceLog);
       // eslint-disable-next-line no-plusplus
       logIndex.value++;
       minutes.value = '';
@@ -271,7 +281,12 @@ export default defineComponent({
 
       // TODO: get the actual expected minimum log time.
       // eslint-disable-next-line radix
-      if (finalValueLog.value >= parseInt(adkData.value.minimumHoursNow) * 60) {
+      if (finalValueLog.value >= parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60) {
+        // console.log(programDoc.value.data.adks[index].minimumHoursNow);
+        // // eslint-disable-next-line radix
+        // console.log(parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60);
+        // console.log('Meet required time');
+        // console.log(finalValueLog.value);
         props.teamDoc?.update(() => ({
           isComplete: true,
           adkIndex
@@ -281,15 +296,6 @@ export default defineComponent({
     }
 
     function undo() {
-      // const log = ref({
-      //   minutes: '',
-      //   timestamp: '',
-      //   name: '',
-      //   // eslint-disable-next-line @typescript-eslint/camelcase
-      //   user_id: props.userDoc.data._id,
-      //   uniqueId: ''
-      // });
-      // eslint-disable-next-line no-plusplus
       if (adkData.value.practiceLog.length > 0) {
         logIndex.value -= 1;
 
@@ -301,36 +307,32 @@ export default defineComponent({
         // console.log(finalValueLog.value);
 
         adkData.value.practiceLog.pop();
-        // adkData.value.practiceLog.pop();
 
-        // console.log(adkData.value.practiceLog);
-
-        // adkData.value.practiceLog.push(log.value);
-        // adkData.value.practiceLog[
-        //   logIndex.value
-        // ].name = `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`;
-        // adkData.value.practiceLog[logIndex.value].uniqueId = new ObjectId();
-        // eslint-disable-next-line no-plusplus
-        // logIndex.value++;
         tableRefresh.value += 1;
-        // eslint-disable-next-line radix
-        // if (finalValueLog.value >= parseInt(adkData.value.minimumHoursNow) * 60) {
-        //   props.teamDoc?.update(() => ({
-        //     isComplete: true,
-        //     adkIndex
-        //   }));
-        // }
+        if (
+          finalValueLog.value <
+          // eslint-disable-next-line radix
+          parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60
+        ) {
+          console.log('Does not reach required time');
+          props.teamDoc?.update(() => ({
+            isComplete: false,
+            adkIndex
+          }));
+          props.teamDoc?.update();
+        }
       }
     }
 
     const filter = ref('Personal');
-    const tableItems = computed(() =>
-      adkData.value.practiceLog.filter((item: TableItem) => {
+    const tableItems = computed(() => {
+      console.log('tableitems', adkData.value.practiceLog);
+      return adkData.value.practiceLog.filter((item: TableItem) => {
         // console.log(item);
         if (filter.value === 'Personal') return item.user_id.equals(props.userDoc.data._id);
         return true;
-      })
-    );
+      });
+    });
 
     // function deleteLog(id: ObjectID) {
     //   console.log(id);
@@ -360,7 +362,8 @@ export default defineComponent({
       // deleteLog,
       minutes,
       tableItems,
-      filter
+      filter,
+      programDoc
     };
   }
 });
