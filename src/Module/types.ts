@@ -12,6 +12,8 @@ export default interface MongoDoc {
 export interface TableItem {
   user_id: ObjectId;
   time: Date;
-  log: string;
-  uniqueId: ObjectId;
+  minutes: number;
+  name: string;
+  // log: string;
+  // uniqueId: ObjectId;
 }
