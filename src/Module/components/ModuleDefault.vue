@@ -69,7 +69,7 @@
             </validation-provider>
           </div>
           <div class="d-flex justify-center">
-            <v-btn
+            <!-- <v-btn
               x-large
               outlined
               class="module-default__log-btn2 mt-5"
@@ -79,17 +79,17 @@
               @click="process"
             >
               LOG MINUTES
-            </v-btn>
-            <!-- <v-btn
-            x-large
-            outlined
-            class="module-default__log-btn"
-            depressed
-            :ripple="false"
-            :disabled="invalid || userType === 'stakeholder'"
-            @click="process"
-            >LOG MINUTES</v-btn
-            > -->
+            </v-btn> -->
+            <v-btn
+              x-large
+              outlined
+              class="module-default__log-btn2 mt-5"
+              depressed
+              :ripple="false"
+              :disabled="invalid || userType === 'stakeholder'"
+              @click="process"
+              >LOG MINUTES</v-btn
+            >
           </div>
           <div class="d-flex justify-center">
             <v-btn
@@ -105,26 +105,46 @@
           </div>
         </div>
         <div class="pa-0 mt-12">
-          <!-- <v-btn x-small outlined depressed class="mr-1 mb-2">Personal</v-btn>
-          <v-btn class="ml-1 mb-2" x-small outlined depressed>Team</v-btn> -->
-          <div class="tableview__total-log-title mt-6 b-2 d-flex justify-center">Logged Time</div>
           <div class="tableview__total-log mb-6 d-flex justify-center">
-            {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
-          </div>
-          <div :key="tableRefresh" class="pa-0">
-            <v-data-table
-              :headers="header"
-              :items="adkData.practiceLog"
-              sort-by="timestamp"
-              :items-per-page="100"
-              :hide-default-footer="true"
-            >
-              <!-- <template v-slot:item.delete>
-              <v-btn small icon depressed @click="deleteLog(adkData.practiceLog[index])">
-                <v-icon small> mdi-delete </v-icon>
-              </v-btn>
-            </template> -->
-            </v-data-table>
+            <div class="tableview__column mt-12">
+              <v-btn
+                x-small
+                depressed
+                class="mr-1 mb-2"
+                :dark="filter === 'Personal' ? true : false"
+                :outlined="filter !== 'Personal' ? true : false"
+                @click="filter = 'Personal'"
+                >Personal</v-btn
+              >
+              <v-btn
+                class="ml-1 mb-2"
+                x-small
+                depressed
+                :dark="filter === 'Team' ? true : false"
+                :outlined="filter !== 'Team' ? true : false"
+                @click="filter = 'Team'"
+                >Team</v-btn
+              >
+              <div class="tableview__total-log-title mt-6 b-2">Logged Time</div>
+              <div class="tableview__total-log mb-6">
+                {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
+              </div>
+              <div :key="tableRefresh" class="pa-0">
+                <v-data-table
+                  :headers="header"
+                  :items="tableItems"
+                  sort-by="time-stamp"
+                  :items-per-page="100"
+                  :hide-default-footer="true"
+                >
+                  <!-- <template v-slot:item.delete="{ item }">
+                    <v-btn small icon depressed @click="deleteLog(item.id)">
+                      <v-icon small> mdi-delete </v-icon>
+                    </v-btn>
+                  </template> -->
+                </v-data-table>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -139,10 +159,11 @@
 <script lang="ts">
 import { defineComponent, computed, PropType, ref } from '@vue/composition-api';
 import { getModAdk, getModMongoDoc, loading } from 'pcv4lib/src';
+// import { ObjectID, ObjectId } from 'bson';
 import Instruct from './ModuleInstruct.vue';
 import Table from './TableView.vue';
-import MongoDoc from '../types';
-import { items, HEADER } from './const';
+import MongoDoc, { TableItem } from '../types';
+import { HEADER } from './const';
 
 export default defineComponent({
   name: 'ModuleDefault',
@@ -173,8 +194,8 @@ export default defineComponent({
   setup(props, ctx) {
     const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
     const initPracticeDefault = {
-      practiceLog: []
-      // minimumHoursNow: '3 Hours'
+      practiceLog: [],
+      minimumHoursNow: '3 Hours'
     };
     const { adkData, adkIndex } = getModAdk(
       props,
@@ -185,7 +206,7 @@ export default defineComponent({
       'inputTeamDoc'
     );
 
-    const minutes = ref('');
+    const minutes = ref();
     console.log(adkData.value.practiceLog);
 
     const logIndex = ref(adkData.value.practiceLog.length - 1);
@@ -225,18 +246,13 @@ export default defineComponent({
         // eslint-disable-next-line @typescript-eslint/camelcase
         user_id: props.userDoc.data._id
       });
-      // console.log(`Minutes logged: ${minutes.value}`);
-      // console.log(adkData.value.practiceLog);
+      // console.log(props.userDoc.data._id);
+      // eslint-disable-next-line no-plusplus
       adkData.value.practiceLog.push(log.value);
-      // adkData.value.practiceLog[logIndex.value].timestamp = date;
-      // adkData.value.practiceLog[
-      //   logIndex.value
-      // ].name = `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`;
-      // adkData.value.practiceLog[logIndex.value].minutes = minutes.value;
-      minutes.value = '';
       console.log(adkData.value.practiceLog);
       // eslint-disable-next-line no-plusplus
       logIndex.value++;
+      minutes.value = '';
 
       lengthPractice.value = 0;
 
@@ -244,7 +260,7 @@ export default defineComponent({
       finalValueLog.value = 0;
       tableRefresh.value += 1;
 
-      while (lengthPractice.value <= adkData.value.practiceLog.length) {
+      while (lengthPractice.value < adkData.value.practiceLog.length) {
         // console.log(adkData.value.practiceLog[lengthPractice.value].minutes);
         // eslint-disable-next-line radix
         finalValueLog.value += parseInt(adkData.value.practiceLog[lengthPractice.value].minutes);
@@ -253,7 +269,7 @@ export default defineComponent({
         // console.log(finalValueLog.value)
       }
 
-      // TODO: get the actual expected minimum log time. Maybe `adkData.defaultActivity.endEarlyActivity * 60`?
+      // TODO: get the actual expected minimum log time.
       // eslint-disable-next-line radix
       if (finalValueLog.value >= parseInt(adkData.value.minimumHoursNow) * 60) {
         props.teamDoc?.update(() => ({
@@ -269,7 +285,9 @@ export default defineComponent({
       //   minutes: '',
       //   timestamp: '',
       //   name: '',
-      //   user_id: props.userDoc.data._id
+      //   // eslint-disable-next-line @typescript-eslint/camelcase
+      //   user_id: props.userDoc.data._id,
+      //   uniqueId: ''
       // });
       // eslint-disable-next-line no-plusplus
       if (adkData.value.practiceLog.length > 0) {
@@ -291,43 +309,36 @@ export default defineComponent({
         // adkData.value.practiceLog[
         //   logIndex.value
         // ].name = `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`;
+        // adkData.value.practiceLog[logIndex.value].uniqueId = new ObjectId();
         // eslint-disable-next-line no-plusplus
         // logIndex.value++;
         tableRefresh.value += 1;
         // eslint-disable-next-line radix
-        if (finalValueLog.value >= parseInt(adkData.value.minimumHoursNow) * 60) {
-          props.teamDoc?.update(() => ({
-            isComplete: true,
-            adkIndex
-          }));
-        }
-      } else {
-        // eslint-disable-next-line radix
-        finalValueLog.value -= parseInt(
-          adkData.value.practiceLog[adkData.value.practiceLog.length - 1].minutes
-        );
-        logIndex.value -= 1;
-        adkData.value.practiceLog.pop();
-        // adkData.value.practiceLog.pop();
-        // adkData.value.practiceLog.push(log.value);
-        // adkData.value.practiceLog[0].name = `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`;
-        // eslint-disable-next-line no-plusplus
-        // logIndex.value++;
-        tableRefresh.value += 1;
-        // console.log('last log');
-        // eslint-disable-next-line radix
-        if (finalValueLog.value >= parseInt(adkData.value.minimumHoursNow) * 60) {
-          props.teamDoc?.update(() => ({
-            isComplete: true,
-            adkIndex
-          }));
-        }
+        // if (finalValueLog.value >= parseInt(adkData.value.minimumHoursNow) * 60) {
+        //   props.teamDoc?.update(() => ({
+        //     isComplete: true,
+        //     adkIndex
+        //   }));
+        // }
       }
     }
 
-    function deleteLog(item: string) {
-      console.log(item);
-    }
+    const filter = ref('Personal');
+    const tableItems = computed(() =>
+      adkData.value.practiceLog.filter((item: TableItem) => {
+        // console.log(item);
+        if (filter.value === 'Personal') return item.user_id.equals(props.userDoc.data._id);
+        return true;
+      })
+    );
+
+    // function deleteLog(id: ObjectID) {
+    //   console.log(id);
+    //   adkData.value.practiceLog = adkData.value.practiceLog.filter((item: TableItem) => {
+    //     return item.id !== id;
+    //   });
+    //   teamDocument.value.update();
+    // }
 
     const setupInstructions = ref({
       description: '',
@@ -336,7 +347,6 @@ export default defineComponent({
 
     return {
       finalValueLog,
-      // minutes,
       setupInstructions,
       showInstructions: 'true',
       adkData,
@@ -345,11 +355,12 @@ export default defineComponent({
       undo,
       teamDocument,
       ...loading(logMinutes, 'Logged Successfully', 'Could not log at this time'),
-      items,
       header: ref(HEADER),
       tableRefresh,
-      deleteLog,
-      minutes
+      // deleteLog,
+      minutes,
+      tableItems,
+      filter
     };
   }
 });

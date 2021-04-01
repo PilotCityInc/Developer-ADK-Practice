@@ -1,3 +1,5 @@
+import { ObjectId } from 'bson';
+
 export default interface MongoDoc {
   data: {
     adks: Record<string, any>[];
@@ -5,4 +7,11 @@ export default interface MongoDoc {
   };
   update: (shouldMarkAsComplete?: any) => Promise<any>;
   changeStream: any;
+}
+
+export interface TableItem {
+  user_id: ObjectId;
+  time: Date;
+  log: string;
+  uniqueId: ObjectId;
 }
