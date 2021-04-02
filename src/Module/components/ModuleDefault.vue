@@ -114,14 +114,14 @@
               <v-btn
                 x-small
                 depressed
-                class="mr-1 mb-2"
+                class="mr-1 mb-3"
                 :dark="filter === 'Personal' ? true : false"
                 :outlined="filter !== 'Personal' ? true : false"
                 @click="filter = 'Personal'"
                 >Personal</v-btn
               >
               <v-btn
-                class="ml-1 mb-2"
+                class="ml-1 mb-3"
                 x-small
                 depressed
                 :dark="filter === 'Team' ? true : false"
