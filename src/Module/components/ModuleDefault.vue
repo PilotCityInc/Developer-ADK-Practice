@@ -208,7 +208,7 @@ export default defineComponent({
     });
 
     const index = programDoc.value.data.adks.findIndex(function findOfferObj(obj) {
-      return obj.name === 'practice';
+      return obj.name === 'tinker';
     });
 
     const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
@@ -219,7 +219,7 @@ export default defineComponent({
     const { adkData: teamAdkData, adkIndex } = getModAdk(
       props,
       ctx.emit,
-      'Practice',
+      'tinker',
       initPracticeDefault,
       'teamDoc',
       'inputTeamDoc'
