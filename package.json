@@ -3,7 +3,7 @@
   "license": "MIT",
   "main": "/dist/index.ts",
   "name": "developer-adk-practice",
-  "version": "1.0.36",
+  "version": "1.0.40",
   "description": "PilotCity Development Kit Template for creating your own Program Activities",
   "repository": {
     "type": "git",
