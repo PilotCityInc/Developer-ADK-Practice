@@ -87,10 +87,14 @@
               depressed
               :ripple="false"
               :disabled="invalid || userType === 'stakeholder'"
+              :loading="loading"
               @click="process"
               >LOG MINUTES</v-btn
             >
           </div>
+          <v-alert v-if="success || error" class="mt-3" :type="success ? 'success' : 'error'">{{
+            message
+          }}</v-alert>
           <div class="d-flex justify-center">
             <v-btn
               v-if="adkData.practiceLog.length > 0"
@@ -292,7 +296,7 @@ export default defineComponent({
           adkIndex
         }));
       }
-      return props.teamDoc?.update();
+      return props.teamDoc!.update();
     }
 
     function undo() {
