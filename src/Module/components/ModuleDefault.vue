@@ -108,9 +108,9 @@
             >
           </div>
         </div>
-        <div class="pa-0 mt-12">
+        <div class="pa-0 mt-10">
           <div class="tableview__total-log mb-6 d-flex justify-center">
-            <div class="tableview__column mt-12">
+            <div class="tableview__column">
               <v-btn
                 x-small
                 depressed
@@ -360,7 +360,7 @@ export default defineComponent({
       logIndex,
       undo,
       teamDocument,
-      ...loading(logMinutes, 'Logged Successfully', 'Could not log at this time'),
+      ...loading(logMinutes, 'Minutes Logged', 'Could not log at this time'),
       header: ref(HEADER),
       tableRefresh,
       // deleteLog,
