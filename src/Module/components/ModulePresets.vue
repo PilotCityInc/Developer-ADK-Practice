@@ -154,7 +154,7 @@ export default defineComponent({
     });
 
     const index = programDoc.value.data.adks.findIndex(function findOfferObj(obj) {
-      return obj.name === 'practice';
+      return obj.name === 'tinker';
     });
 
     const initPracticePresets = {
