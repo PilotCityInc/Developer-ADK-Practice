@@ -87,10 +87,14 @@
               depressed
               :ripple="false"
               :disabled="invalid || userType === 'stakeholder'"
+              :loading="loading"
               @click="process"
               >LOG MINUTES</v-btn
             >
           </div>
+          <v-alert v-if="success || error" class="mt-3" :type="success ? 'success' : 'error'">{{
+            message
+          }}</v-alert>
           <div class="d-flex justify-center">
             <v-btn
               v-if="adkData.practiceLog.length > 0"
@@ -104,20 +108,20 @@
             >
           </div>
         </div>
-        <div class="pa-0 mt-12">
+        <div class="pa-0 mt-10">
           <div class="tableview__total-log mb-6 d-flex justify-center">
-            <div class="tableview__column mt-12">
+            <div class="tableview__column">
               <v-btn
                 x-small
                 depressed
-                class="mr-1 mb-2"
+                class="mr-1 mb-3"
                 :dark="filter === 'Personal' ? true : false"
                 :outlined="filter !== 'Personal' ? true : false"
                 @click="filter = 'Personal'"
                 >Personal</v-btn
               >
               <v-btn
-                class="ml-1 mb-2"
+                class="ml-1 mb-3"
                 x-small
                 depressed
                 :dark="filter === 'Team' ? true : false"
@@ -216,18 +220,18 @@ export default defineComponent({
     });
 
     const index = programDoc.value.data.adks.findIndex(function findOfferObj(obj) {
-      return obj.name === 'practice';
+      return obj.name === 'tinker';
     });
 
     const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
     const initPracticeDefault = {
-      practiceLog: []
-      // minimumHoursNow: '3 Hours'
+      practiceLog: [],
+      minimumHoursNow: 3
     };
     const { adkData: teamAdkData, adkIndex } = getModAdk(
       props,
       ctx.emit,
-      'Practice',
+      'tinker',
       initPracticeDefault,
       'teamDoc',
       'inputTeamDoc'
@@ -247,7 +251,6 @@ export default defineComponent({
 
     if (adkData.value.practiceLog.length > 0) {
       while (lengthPractice.value < adkData.value.practiceLog.length) {
-        // console.log(adkData.value.practiceLog[lengthPractice.value].minutes);
         // eslint-disable-next-line radix
         finalValueLog.value += parseInt(adkData.value.practiceLog[lengthPractice.value].minutes);
 
@@ -295,18 +298,13 @@ export default defineComponent({
 
       // TODO: get the actual expected minimum log time.
       // eslint-disable-next-line radix
-      if (finalValueLog.value >= parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60) {
-        // console.log(programDoc.value.data.adks[index].minimumHoursNow);
-        // // eslint-disable-next-line radix
-        // console.log(parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60);
-        // console.log('Meet required time');
-        // console.log(finalValueLog.value);
-        props.teamDoc?.update(() => ({
+      if (finalValueLog.value >= parseInt(adkData.value.minimumHoursNow) * 60) {
+        return props.teamDoc?.update(() => ({
           isComplete: true,
           adkIndex
         }));
       }
-      return props.teamDoc?.update();
+      return props.teamDoc!.update();
     }
 
     function undo() {
@@ -340,7 +338,6 @@ export default defineComponent({
 
     const filter = ref('Personal');
     const tableItems = computed(() => {
-      console.log('tableitems', adkData.value.practiceLog);
       return adkData.value.practiceLog.filter((item: TableItem) => {
         // console.log(item);
         if (filter.value === 'Personal') return item.user_id.equals(props.userDoc.data._id);
@@ -370,7 +367,7 @@ export default defineComponent({
       logIndex,
       undo,
       teamDocument,
-      ...loading(logMinutes, 'Logged Successfully', 'Could not log at this time'),
+      ...loading(logMinutes, 'Minutes Logged', 'Could not log at this time'),
       header: ref(HEADER),
       tableRefresh,
       // deleteLog,

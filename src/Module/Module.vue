@@ -270,7 +270,7 @@ import * as Module from './components';
 import MongoDoc from './types';
 
 export default defineComponent({
-  name: 'Practice',
+  name: 'tinker',
   components: {
     'module-monitor': Module.Monitor,
     'module-setup': Module.Setup,
@@ -310,11 +310,11 @@ export default defineComponent({
     });
 
     const index = programDoc.value.data.adks.findIndex(function findOfferObj(obj) {
-      return obj.name === 'practice';
+      return obj.name === 'tinker';
     });
     if (index === -1) {
       const initPractice = {
-        name: 'practice'
+        name: 'tinker'
       };
       programDoc.value.data.adks.push(initPractice);
     }

@@ -52,14 +52,13 @@ export default defineComponent({
   setup(props, ctx) {
     const studentDocument = getModMongoDoc(props, ctx.emit, {}, 'studentDoc', 'inputStudentDoc');
     const teamDocument = getModMongoDoc(props, ctx.emit, {}, 'teamDoc', 'inputTeamDoc');
-    // const { adkData } = getModAdk(props, ctx.emit, 'practice', 'studentDoc', 'inputStudentDoc');
 
     // console.log(studentDocument.value.data.adks);
 
     const { adkData: AdkData } = getModAdk(
       props,
       ctx.emit,
-      'Practice',
+      'tinker',
       {},
       'teamDoc',
       'inputTeamDoc'

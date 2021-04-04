@@ -60,7 +60,7 @@ export default defineComponent({
       data: {
         adks: [
           {
-            name: 'Practice',
+            name: 'Tinker',
             practiceLog: [
               {
                 minutes: 10,
