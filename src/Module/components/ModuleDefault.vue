@@ -129,6 +129,18 @@
               <div class="tableview__total-log mb-6">
                 {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
               </div>
+              <div class="tableview__total-log-title">Total Minutes Required</div>
+              <div class="tableview__total-log mb-6">{{ requiredMinutes }}m</div>
+              <div v-if="requiredMinutes - finalValueLog > 0">
+                <div class="tableview__total-log-title">Remaining Total Minutes</div>
+                <div class="tableview__total-log mb-6">{{ requiredMinutes - finalValueLog }}m</div>
+              </div>
+              <div v-if="requiredMinutes - finalValueLog <= 0">
+                <div class="tableview__total-log-title">
+                  You Have met the required minimum amount of minutes! Please Keep Logging your
+                  minutes if you continue to work on your project
+                </div>
+              </div>
               <div :key="tableRefresh" class="pa-0">
                 <v-data-table
                   :headers="header"
@@ -223,6 +235,8 @@ export default defineComponent({
 
     const minutes = ref();
     const adkData = ref(teamAdkData.value);
+    // eslint-disable-next-line radix
+    const requiredMinutes = ref(parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60);
     // console.log(adkData.value.practiceLog);
 
     const logIndex = ref(adkData.value.practiceLog.length - 1);
@@ -363,7 +377,9 @@ export default defineComponent({
       minutes,
       tableItems,
       filter,
-      programDoc
+      programDoc,
+      index,
+      requiredMinutes
     };
   }
 });
