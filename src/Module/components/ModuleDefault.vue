@@ -249,9 +249,31 @@ export default defineComponent({
 
     const minutes = ref();
     const adkData = ref(teamAdkData.value);
+    const requiredMinutes = ref();
+
     // eslint-disable-next-line radix
-    const requiredMinutes = ref(parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60);
-    // console.log(adkData.value.practiceLog);
+    if (parseInt(programDoc.value.data.adks[index].minimumHoursNow) > 0) {
+      // eslint-disable-next-line radix
+      requiredMinutes.value = parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60;
+      // console.log(adkData.value.practiceLog);
+    } else {
+      const initPracticePresets = {
+        minimumHoursNow: '3 Hours',
+        defaultActivity: {
+          groupActivity: 'Screening',
+          requiredActivity: 'Yes',
+          deliverableActivity: 'No',
+          endEarlyActivity: 'Yes',
+          required: false
+        }
+      };
+      programDoc.value.data.adks[index] = {
+        ...initPracticePresets,
+        ...programDoc.value.data.adks[index]
+      };
+      // eslint-disable-next-line radix
+      requiredMinutes.value = parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60;
+    }
 
     const logIndex = ref(adkData.value.practiceLog.length - 1);
     // console.log(logIndex.value);

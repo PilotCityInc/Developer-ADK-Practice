@@ -39,26 +39,26 @@
         <!-- </div>
         </v-container> -->
       </ValidationObserver>
-      <!-- <v-divider class="presets__divider"></v-divider>
-      <div class="presets__section-title">Instructions</div>
-      <Instruct v-model="setupInstructions" />
+      <!-- <v-divider class="presets__divider"></v-divider> -->
+      <!-- <div class="presets__section-title">Instructions</div> -->
+      <!-- <Instruct v-model="setupInstructions" /> -->
       <v-divider class="presets__divider"></v-divider>
       <div class="presets__section-title">Defaults</div>
 
-      <v-select
-        v-model="adkData.defaultActivity.groupActivity"
+      <!-- <v-select
+        v-model="programDoc.data.adks[index].defaultActivity.groupActivity"
         disabled
         :items="group"
         label="What activity group does this belong to?"
         outlined
       ></v-select>
       <v-select
-        v-model="adkData.defaultActivity.requiredActivity"
+        v-model="programDoc.data.adks[index].defaultActivity.requiredActivity"
         disabled
         :items="required"
         label="Is this activity required for participants to complete?"
         outlined
-      ></v-select> -->
+      ></v-select>
 
       <!-- <v-select
         :items="lockOrder"
@@ -66,7 +66,7 @@
         outlined
       ></v-select> -->
       <!-- <v-select
-        v-model="adkData.defaultActivity.deliverableActivity"
+        v-model="programDoc.data.adks[index].defaultActivity.deliverableActivity"
         disabled
         :items="deliverable"
         label="Is this a deliverable?"
@@ -78,12 +78,12 @@
         outlined
       ></v-select> -->
       <!-- <v-select
-        v-model="adkData.defaultActivity.endEarlyActivity"
+        v-model="programDoc.data.adks[index].defaultActivity.endEarlyActivity"
         disabled
         :items="endEarly"
         label="Allow participants to end program early after completion of this activity?"
         outlined
-      ></v-select> -->
+      ></v-select>  -->
       <!-- POST-ACTIVITY REFLECTION -->
       <!-- <v-text-field
         label="Post-Activity Reflection"
@@ -210,7 +210,12 @@ export default defineComponent({
       ...loading(save, 'Saved Successfully', 'Could not save at this time'),
       index,
       programDoc,
-      save
+      save,
+      group,
+      required,
+      deliverable,
+      endEarly,
+      minimumHours
     };
   }
   // setup() {
