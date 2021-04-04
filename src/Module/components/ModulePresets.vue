@@ -45,7 +45,7 @@
       <v-divider class="presets__divider"></v-divider>
       <div class="presets__section-title">Defaults</div>
 
-      <v-select
+      <!-- <v-select
         v-model="programDoc.data.adks[index].defaultActivity.groupActivity"
         disabled
         :items="group"
@@ -65,25 +65,25 @@
         label="Lock activity group and placement order?"
         outlined
       ></v-select> -->
-      <v-select
+      <!-- <v-select
         v-model="programDoc.data.adks[index].defaultActivity.deliverableActivity"
         disabled
         :items="deliverable"
         label="Is this a deliverable?"
         outlined
-      ></v-select>
+      ></v-select> -->
       <!-- <v-select
         :items="accessibility"
         label="Make this activity accessible to participants anytime?"
         outlined
       ></v-select> -->
-      <v-select
+      <!-- <v-select
         v-model="programDoc.data.adks[index].defaultActivity.endEarlyActivity"
         disabled
         :items="endEarly"
         label="Allow participants to end program early after completion of this activity?"
         outlined
-      ></v-select>
+      ></v-select>  -->
       <!-- POST-ACTIVITY REFLECTION -->
       <!-- <v-text-field
         label="Post-Activity Reflection"
