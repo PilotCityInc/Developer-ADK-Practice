@@ -130,21 +130,31 @@
                 >Team</v-btn
               >
               <div class="tableview__total-log-title mt-6 b-2">Logged Time</div>
-              <div class="tableview__total-log mb-6">
+              <div class="tableview__total-log mb-3">
                 {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
               </div>
-              <div class="tableview__total-log-title">Total Minutes Required</div>
+              <v-chip-group class="mb-6">
+                <v-chip dark rounded>{{ requiredMinutes }} Minutes Required</v-chip>
+                <v-chip dark rounded v-if="requiredMinutes - finalValueLog > 0">
+                  {{ requiredMinutes - finalValueLog }} Minutes Left
+                </v-chip>
+                <v-chip dark rounded v-if="requiredMinutes - finalValueLog <= 0">
+                  Minimum met. Keep logging!
+                </v-chip>
+              </v-chip-group>
+              <!-- <div class="tableview__total-log-title">Total Minutes Required</div>
               <div class="tableview__total-log mb-6">{{ requiredMinutes }}m</div>
               <div v-if="requiredMinutes - finalValueLog > 0">
                 <div class="tableview__total-log-title">Remaining Total Minutes</div>
                 <div class="tableview__total-log mb-6">{{ requiredMinutes - finalValueLog }}m</div>
               </div>
+
               <div v-if="requiredMinutes - finalValueLog <= 0">
                 <div class="tableview__total-log-title">
                   You Have met the required minimum amount of minutes! Please Keep Logging your
                   minutes if you continue to work on your project
                 </div>
-              </div>
+              </div> -->
               <div :key="tableRefresh" class="pa-0">
                 <v-data-table
                   :headers="header"
