@@ -262,7 +262,7 @@ export default defineComponent({
       'inputTeamDoc'
     );
 
-    const minutes = ref();
+    const minutes = ref(0);
     const adkData = ref(teamAdkData.value);
     const requiredMinutes = ref();
 
