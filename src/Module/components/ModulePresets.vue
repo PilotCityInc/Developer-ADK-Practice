@@ -42,8 +42,8 @@
       <!-- <v-divider class="presets__divider"></v-divider> -->
       <!-- <div class="presets__section-title">Instructions</div> -->
       <!-- <Instruct v-model="setupInstructions" /> -->
-      <v-divider class="presets__divider"></v-divider>
-      <div class="presets__section-title">Defaults</div>
+      <!-- <v-divider class="presets__divider"></v-divider>
+      <div class="presets__section-title">Defaults</div> -->
 
       <!-- <v-select
         v-model="programDoc.data.adks[index].defaultActivity.groupActivity"
@@ -60,7 +60,7 @@
         outlined
       ></v-select>
 
-      <!-- <v-select
+      <!- <v-select
         :items="lockOrder"
         label="Lock activity group and placement order?"
         outlined

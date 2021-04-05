@@ -108,9 +108,37 @@
             >
           </div>
         </div>
-        <div class="pa-0 mt-10">
+        <div class="pa-0 mt-5">
           <div class="tableview__total-log mb-6 d-flex justify-center">
             <div class="tableview__column">
+              <div class="tableview__total-log-title mt-6 b-2">Logged Time</div>
+              <div class="tableview__total-log mb-3">
+                {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
+              </div>
+              <div class="mb-6 d-flex justify-center">
+                <v-chip-group>
+                  <v-chip color="#f79961" small dark rounded
+                    >{{ requiredMinutes }} Minutes Required</v-chip
+                  >
+                  <v-chip
+                    v-if="requiredMinutes - finalValueLog > 0"
+                    color="#f79961"
+                    small
+                    dark
+                    rounded
+                    >{{ requiredMinutes - finalValueLog }} Minutes Left</v-chip
+                  >
+                  <v-chip
+                    v-if="requiredMinutes - finalValueLog <= 0"
+                    color="#f79961"
+                    small
+                    dark
+                    rounded
+                    >Minimum met. Keep logging!</v-chip
+                  >
+                </v-chip-group>
+              </div>
+
               <v-btn
                 x-small
                 depressed
@@ -129,35 +157,6 @@
                 @click="filter = 'Team'"
                 >Team</v-btn
               >
-              <div class="tableview__total-log-title mt-6 b-2">Logged Time</div>
-              <div class="tableview__total-log mb-3">
-                {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
-              </div>
-              <v-chip-group class="mb-6 d-flex justify-center">
-                <v-chip
-                  color="orange"
-                  small
-                  dark
-                  rounded
-                  >{{ requiredMinutes }} Minutes Required</v-chip
-                >
-                <v-chip
-                  color="orange"
-                  small
-                  dark
-                  rounded
-                  v-if="requiredMinutes - finalValueLog > 0"
-                  >{{ requiredMinutes - finalValueLog }} Minutes Left</v-chip
-                >
-                <v-chip
-                  color="orange"
-                  small
-                  dark
-                  rounded
-                  v-if="requiredMinutes - finalValueLog <= 0"
-                  >Minimum met. Keep logging!</v-chip
-                >
-              </v-chip-group>
               <!-- <div class="tableview__total-log-title">Total Minutes Required</div>
               <div class="tableview__total-log mb-6">{{ requiredMinutes }}m</div>
               <div v-if="requiredMinutes - finalValueLog > 0">
