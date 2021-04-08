@@ -47,7 +47,7 @@
       <v-container class="pa-0">
         <div class="d-flex flex-column justify-center align-center">
           <div class="d-flex justify-center">
-            <validation-provider v-slot="{ errors }" slim rules="numeric|min_value:1|required">
+            <validation-provider v-slot="{}" slim rules="numeric|min_value:1|required">
               <!-- <v-input
               v-model="adkData.practiceLog[logIndex].minutes"
               placeholder="0"
@@ -64,7 +64,6 @@
                 class="module-default__text-field2 mt-12"
                 :readonly="userType === 'stakeholder'"
                 outlined
-                :error-messages="errors"
               ></v-text-field>
             </validation-provider>
           </div>
@@ -117,9 +116,6 @@
               </div>
               <div class="mb-6 d-flex justify-center">
                 <v-chip-group>
-                  <v-chip color="#f79961" small dark rounded
-                    >{{ requiredMinutes }} Minutes Required</v-chip
-                  >
                   <v-chip
                     v-if="requiredMinutes - finalValueLog > 0"
                     color="#f79961"
@@ -135,6 +131,9 @@
                     dark
                     rounded
                     >Minimum met. Keep logging!</v-chip
+                  >
+                  <v-chip color="#f79961" small outlined rounded
+                    >{{ requiredMinutes }} Minutes Required</v-chip
                   >
                 </v-chip-group>
               </div>
@@ -326,7 +325,7 @@ export default defineComponent({
       // console.log(adkData.value.practiceLog);
       // eslint-disable-next-line no-plusplus
       logIndex.value++;
-      minutes.value = '';
+      minutes.value = '0';
 
       lengthPractice.value = 0;
 
