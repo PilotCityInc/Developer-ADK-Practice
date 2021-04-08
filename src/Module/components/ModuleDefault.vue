@@ -86,14 +86,22 @@
               depressed
               :ripple="false"
               :disabled="invalid || userType === 'stakeholder'"
-              :loading="loading"
-              @click="process"
+              :loading="loadingBtn"
+              @click="logMinutes"
               >LOG MINUTES</v-btn
             >
           </div>
-          <v-alert v-if="success || error" class="mt-3" :type="success ? 'success' : 'error'">{{
-            message
-          }}</v-alert>
+          <v-alert
+            :value="success === true"
+            class="mt-3"
+            type="success"
+            dismissible
+            close-text="Close Alert"
+            >Logged minutes!</v-alert
+          >
+          <v-alert v-if="error" class="mt-3" type="error" dismissible close-text="Close Alert"
+            >Error Logging minutes!</v-alert
+          >
           <div class="d-flex justify-center">
             <v-btn
               v-if="adkData.practiceLog.length > 0"
@@ -102,6 +110,7 @@
               class="mt-2"
               color="#ffffff"
               small
+              :loading="loadingBtn"
               @click="undo"
               ><v-icon left>mdi-undo</v-icon>Undo</v-btn
             >
@@ -198,7 +207,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, PropType, ref } from '@vue/composition-api';
-import { getModAdk, getModMongoDoc, loading } from 'pcv4lib/src';
+import { getModAdk, getModMongoDoc } from 'pcv4lib/src';
 // import { ObjectID, ObjectId } from 'bson';
 import Instruct from './ModuleInstruct.vue';
 import Table from './TableView.vue';
@@ -261,9 +270,12 @@ export default defineComponent({
       'inputTeamDoc'
     );
 
-    const minutes = ref(0);
+    const minutes = ref('');
     const adkData = ref(teamAdkData.value);
     const requiredMinutes = ref();
+    const loadingBtn = ref(false);
+    const success = ref(false);
+    const error = ref(false);
 
     // eslint-disable-next-line radix
     if (parseInt(programDoc.value.data.adks[index].minimumHoursNow) > 0) {
@@ -305,7 +317,13 @@ export default defineComponent({
       }
     }
 
-    function logMinutes() {
+    async function logMinutes() {
+      loadingBtn.value = true;
+      success.value = false;
+      setTimeout(() => {
+        loadingBtn.value = false;
+        success.value = true;
+      }, 3000);
       // timestamp, figure out way to only display month, day, and time ex: Jul 12 at 8:10pm
       const timestamp = new Date();
       const unixtime = timestamp.valueOf();
@@ -350,10 +368,16 @@ export default defineComponent({
           adkIndex
         }));
       }
-      return props.teamDoc!.update();
+      await props.teamDoc!.update();
+      // loadingBtn.value = false;
+      return null;
     }
 
-    function undo() {
+    async function undo() {
+      loadingBtn.value = true;
+      setTimeout(() => {
+        loadingBtn.value = false;
+      }, 3000);
       if (adkData.value.practiceLog.length > 0) {
         logIndex.value -= 1;
 
@@ -367,18 +391,19 @@ export default defineComponent({
         adkData.value.practiceLog.pop();
 
         tableRefresh.value += 1;
-        if (
-          finalValueLog.value <
-          // eslint-disable-next-line radix
-          parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60
-        ) {
-          console.log('Does not reach required time');
-          props.teamDoc?.update(() => ({
-            isComplete: false,
-            adkIndex
-          }));
-          props.teamDoc?.update();
-        }
+        // if (
+        //   finalValueLog.value <
+        //   // eslint-disable-next-line radix
+        //   parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60
+        // ) {
+        // console.log('Does not reach required time');
+        // props.teamDoc?.update(() => ({
+        //   isComplete: false,
+        //   adkIndex
+        // }));
+        await props.teamDoc?.update();
+        // }
+        // loadingBtn.value = false;
       }
     }
 
@@ -413,7 +438,8 @@ export default defineComponent({
       logIndex,
       undo,
       teamDocument,
-      ...loading(logMinutes, 'Minutes Logged', 'Could not log at this time'),
+      logMinutes,
+      // ...loading(logMinutes, 'Minutes Logged', 'Could not log at this time'),
       header: ref(HEADER),
       tableRefresh,
       // deleteLog,
@@ -422,7 +448,10 @@ export default defineComponent({
       filter,
       programDoc,
       index,
-      requiredMinutes
+      requiredMinutes,
+      loadingBtn,
+      success,
+      error
     };
   }
 });
