@@ -22,7 +22,7 @@
           <div center class="module-setup__save-button">
             <v-btn
               center
-              class="mt-12"
+              class="mt-8"
               x-large
               outlined
               rounded
