@@ -48,14 +48,6 @@
         <div class="d-flex flex-column justify-center align-center">
           <div class="d-flex justify-center">
             <validation-provider v-slot="{}" slim rules="numeric|min_value:1|required">
-              <!-- <v-input
-              v-model="adkData.practiceLog[logIndex].minutes"
-              placeholder="0"
-              label="Enter Minutes"
-              outlined
-              :error-messages="errors"
-              class="module-default__minutes-log"
-            ></v-input> -->
               <v-text-field
                 v-model="minutes"
                 placeholder="0"
@@ -104,13 +96,12 @@
           >
           <div class="d-flex justify-center">
             <v-btn
-              v-if="adkData.practiceLog.length > 0"
-              :disabled="userType === 'stakeholder'"
+              v-if="teamAdkData.practiceLog.length > 0"
+              :disabled="userType === 'stakeholder' || loadingBtn"
               depressed
               class="mt-2"
               color="#ffffff"
               small
-              :loading="loadingBtn"
               @click="undo"
               ><v-icon left>mdi-undo</v-icon>Undo</v-btn
             >
@@ -121,20 +112,23 @@
             <div class="tableview__column">
               <div class="tableview__total-log-title mt-6 b-2">Logged Time</div>
               <div class="tableview__total-log mb-3">
-                {{ Math.floor(finalValueLog / 60) }}h {{ finalValueLog % 60 }}m
+                {{ Math.floor(totalMinutes / 60) }}h {{ totalMinutes % 60 }}m
               </div>
               <div class="mb-6 d-flex justify-center">
                 <v-chip-group>
+                  <v-chip color="#f79961" small dark rounded
+                    >{{ requiredMinutes }} Minutes Required</v-chip
+                  >
                   <v-chip
-                    v-if="requiredMinutes - finalValueLog > 0"
+                    v-if="requiredMinutes - totalMinutes > 0"
                     color="#f79961"
                     small
                     dark
                     rounded
-                    >{{ requiredMinutes - finalValueLog }} Minutes Left</v-chip
+                    >{{ requiredMinutes - totalMinutes }} Minutes Left</v-chip
                   >
                   <v-chip
-                    v-if="requiredMinutes - finalValueLog <= 0"
+                    v-if="requiredMinutes - totalMinutes <= 0"
                     color="#f79961"
                     small
                     dark
@@ -167,18 +161,18 @@
               >
               <!-- <div class="tableview__total-log-title">Total Minutes Required</div>
               <div class="tableview__total-log mb-6">{{ requiredMinutes }}m</div>
-              <div v-if="requiredMinutes - finalValueLog > 0">
+              <div v-if="requiredMinutes - totalMinutes > 0">
                 <div class="tableview__total-log-title">Remaining Total Minutes</div>
-                <div class="tableview__total-log mb-6">{{ requiredMinutes - finalValueLog }}m</div>
+                <div class="tableview__total-log mb-6">{{ requiredMinutes - totalMinutes }}m</div>
               </div>
 
-              <div v-if="requiredMinutes - finalValueLog <= 0">
+              <div v-if="requiredMinutes - totalMinutes <= 0">
                 <div class="tableview__total-log-title">
                   You Have met the required minimum amount of minutes! Please Keep Logging your
                   minutes if you continue to work on your project
                 </div>
               </div> -->
-              <div :key="tableRefresh" class="pa-0">
+              <div class="pa-0">
                 <v-data-table
                   :headers="header"
                   :items="tableItems"
@@ -271,7 +265,6 @@ export default defineComponent({
     );
 
     const minutes = ref('');
-    const adkData = ref(teamAdkData.value);
     const requiredMinutes = ref();
     const loadingBtn = ref(false);
     const success = ref(false);
@@ -281,7 +274,7 @@ export default defineComponent({
     if (parseInt(programDoc.value.data.adks[index].minimumHoursNow) > 0) {
       // eslint-disable-next-line radix
       requiredMinutes.value = parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60;
-      // console.log(adkData.value.practiceLog);
+      // console.log(teamAdkData.value.practiceLog);
     } else {
       const initPracticePresets = {
         minimumHoursNow: '3 Hours',
@@ -301,20 +294,12 @@ export default defineComponent({
       requiredMinutes.value = parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60;
     }
 
-    const logIndex = ref(adkData.value.practiceLog.length - 1);
-    // console.log(logIndex.value);
-    const lengthPractice = ref(0);
-    const tableRefresh = ref(0);
-    const finalValueLog = ref(0);
+    const totalMinutes = ref(0);
 
-    if (adkData.value.practiceLog.length > 0) {
-      while (lengthPractice.value < adkData.value.practiceLog.length) {
-        // eslint-disable-next-line radix
-        finalValueLog.value += parseInt(adkData.value.practiceLog[lengthPractice.value].minutes);
-
-        lengthPractice.value += 1;
-        // console.log(finalValueLog.value)
-      }
+    if (teamAdkData.value.practiceLog.length > 0) {
+      teamAdkData.value.practiceLog.forEach(event => {
+        totalMinutes.value += Number(event.minutes);
+      });
     }
 
     async function logMinutes() {
@@ -339,30 +324,22 @@ export default defineComponent({
       });
       // console.log(props.userDoc.data._id);
       // eslint-disable-next-line no-plusplus
-      adkData.value.practiceLog.push(log.value);
-      // console.log(adkData.value.practiceLog);
+      teamAdkData.value.practiceLog.push(log.value);
+      // console.log(teamAdkData.value.practiceLog);
       // eslint-disable-next-line no-plusplus
-      logIndex.value++;
       minutes.value = '0';
 
-      lengthPractice.value = 0;
-
       // for the final value logging
-      finalValueLog.value = 0;
-      tableRefresh.value += 1;
-
-      while (lengthPractice.value < adkData.value.practiceLog.length) {
-        // console.log(adkData.value.practiceLog[lengthPractice.value].minutes);
-        // eslint-disable-next-line radix
-        finalValueLog.value += parseInt(adkData.value.practiceLog[lengthPractice.value].minutes);
-
-        lengthPractice.value += 1;
-        // console.log(finalValueLog.value)
+      totalMinutes.value = 0;
+      if (teamAdkData.value.practiceLog.length > 0) {
+        teamAdkData.value.practiceLog.forEach(event => {
+          totalMinutes.value += Number(event.minutes);
+        });
       }
 
       // TODO: get the actual expected minimum log time.
       // eslint-disable-next-line radix
-      if (finalValueLog.value >= parseInt(adkData.value.minimumHoursNow) * 60) {
+      if (totalMinutes.value >= parseInt(teamAdkData.value.minimumHoursNow) * 60) {
         return props.teamDoc?.update(() => ({
           isComplete: true,
           adkIndex
@@ -378,21 +355,18 @@ export default defineComponent({
       setTimeout(() => {
         loadingBtn.value = false;
       }, 3000);
-      if (adkData.value.practiceLog.length > 0) {
-        logIndex.value -= 1;
-
-        // console.log(adkData.value.practiceLog[adkData.value.practiceLog.length - 2].minutes);
+      if (teamAdkData.value.practiceLog.length > 0) {
+        // console.log(teamAdkData.value.practiceLog[teamAdkData.value.practiceLog.length - 2].minutes);
         // eslint-disable-next-line radix
-        finalValueLog.value -= parseInt(
-          adkData.value.practiceLog[adkData.value.practiceLog.length - 1].minutes
+        totalMinutes.value -= parseInt(
+          teamAdkData.value.practiceLog[teamAdkData.value.practiceLog.length - 1].minutes
         );
-        // console.log(finalValueLog.value);
+        // console.log(totalMinutes.value);
 
-        adkData.value.practiceLog.pop();
+        teamAdkData.value.practiceLog.pop();
 
-        tableRefresh.value += 1;
         // if (
-        //   finalValueLog.value <
+        //   totalMinutes.value <
         //   // eslint-disable-next-line radix
         //   parseInt(programDoc.value.data.adks[index].minimumHoursNow) * 60
         // ) {
@@ -409,7 +383,7 @@ export default defineComponent({
 
     const filter = ref('Personal');
     const tableItems = computed(() => {
-      return adkData.value.practiceLog.filter((item: TableItem) => {
+      return teamAdkData.value.practiceLog.filter((item: TableItem) => {
         // console.log(item);
         if (filter.value === 'Personal') return item.user_id.equals(props.userDoc.data._id);
         return true;
@@ -418,7 +392,7 @@ export default defineComponent({
 
     // function deleteLog(id: ObjectID) {
     //   console.log(id);
-    //   adkData.value.practiceLog = adkData.value.practiceLog.filter((item: TableItem) => {
+    //   teamAdkData.value.practiceLog = teamAdkData.value.practiceLog.filter((item: TableItem) => {
     //     return item.id !== id;
     //   });
     //   teamDocument.value.update();
@@ -430,18 +404,16 @@ export default defineComponent({
     });
 
     return {
-      finalValueLog,
+      totalMinutes,
       setupInstructions,
       showInstructions: 'true',
-      adkData,
+      teamAdkData,
       // logMinutes,
-      logIndex,
       undo,
       teamDocument,
       logMinutes,
       // ...loading(logMinutes, 'Minutes Logged', 'Could not log at this time'),
       header: ref(HEADER),
-      tableRefresh,
       // deleteLog,
       minutes,
       tableItems,
