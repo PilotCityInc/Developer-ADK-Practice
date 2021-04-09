@@ -5,11 +5,7 @@ const os = require('os');
 
 module.exports = {
   transpileDependencies: ['vuetify'],
-  pluginOptions: {
-    apollo: {
-      lintGQL: true
-    }
-  },
+  pluginOptions: {},
   chainWebpack: config => {
     config.plugin('fork-ts-checker').tap(args => {
       const totalmem = Math.floor(os.totalmem() / 1024 / 1024); // get OS mem size
