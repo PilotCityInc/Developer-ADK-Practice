@@ -44,7 +44,7 @@ export default defineComponent({
         _id: new ObjectId(),
         firstName: 'Test First',
         lastName: 'Test Last',
-        adks: []
+        profile: { small: 'https://html.sammy-codes.com/images/small-profile.jpeg' }
       },
       update: () => {
         return new Promise((resolve, reject) => {
@@ -82,7 +82,7 @@ export default defineComponent({
       },
       changeStream: {}
     });
-    const userTypeStub = 'organizer';
+    const userTypeStub = 'participant';
     // if (userTypeStub === 'organizer') teamDoc.value = null;
     return {
       programDocStub,

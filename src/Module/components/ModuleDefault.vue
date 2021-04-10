@@ -135,9 +135,9 @@
                     rounded
                     >Minimum met. Keep logging!</v-chip
                   >
-                  <v-chip color="#f79961" small outlined rounded
+                  <!-- <v-chip color="#f79961" small outlined rounded
                     >{{ requiredMinutes }} Minutes Required</v-chip
-                  >
+                  >  -->
                 </v-chip-group>
               </div>
 
@@ -180,6 +180,14 @@
                   :items-per-page="100"
                   :hide-default-footer="true"
                 >
+                  <template v-slot:item.avatar="{ item }">
+                    <v-avatar size="30" color="grey lighten-2"
+                      ><v-img :src="item.avatar"
+                    /></v-avatar>
+                  </template>
+                  <template v-slot:item.timestamp="{ item }">
+                    <span>{{ formatDate(item.timestamp) }}</span>
+                  </template>
                   <!-- <template v-slot:item.delete="{ item }">
                     <v-btn small icon depressed @click="deleteLog(item.id)">
                       <v-icon small> mdi-delete </v-icon>
@@ -201,6 +209,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, PropType, ref } from '@vue/composition-api';
+import moment from 'moment';
 import { getModAdk, getModMongoDoc } from 'pcv4lib/src';
 // import { ObjectID, ObjectId } from 'bson';
 import Instruct from './ModuleInstruct.vue';
@@ -269,6 +278,9 @@ export default defineComponent({
     const loadingBtn = ref(false);
     const success = ref(false);
     const error = ref(false);
+    // const tableRefresh = ref(0);
+
+    const adkData = ref(teamAdkData.value);
 
     // eslint-disable-next-line radix
     if (parseInt(programDoc.value.data.adks[index].minimumHoursNow) > 0) {
@@ -311,28 +323,29 @@ export default defineComponent({
       }, 3000);
       // timestamp, figure out way to only display month, day, and time ex: Jul 12 at 8:10pm
       const timestamp = new Date();
-      const unixtime = timestamp.valueOf();
-      const date = new Date(unixtime).toLocaleDateString('en-us');
+      // const unixtime = timestamp.valueOf();
+      // const date = new Date(unixtime).toLocaleDateString('en-us');
       // console.log(date);
 
       const log = ref({
         minutes: minutes.value,
-        timestamp: date,
+        timestamp,
         name: `${props.userDoc.data.firstName} ${props.userDoc.data.lastName}`,
         // eslint-disable-next-line @typescript-eslint/camelcase
-        user_id: props.userDoc.data._id
+        user_id: props.userDoc.data._id,
+        avatar: props.userDoc?.data.profile ? props.userDoc?.data.profile.small : ''
       });
       // console.log(props.userDoc.data._id);
       // eslint-disable-next-line no-plusplus
       teamAdkData.value.practiceLog.push(log.value);
       // console.log(teamAdkData.value.practiceLog);
       // eslint-disable-next-line no-plusplus
-      minutes.value = '0';
+      minutes.value = null;
 
       // for the final value logging
       totalMinutes.value = 0;
       if (teamAdkData.value.practiceLog.length > 0) {
-        teamAdkData.value.practiceLog.forEach(event => {
+        teamAdkData.value.practiceLog.forEach((event: { minutes: any }) => {
           totalMinutes.value += Number(event.minutes);
         });
       }
@@ -346,6 +359,8 @@ export default defineComponent({
         }));
       }
       await props.teamDoc!.update();
+      // eslint-disable-next-line no-plusplus
+      // tableRefresh.value++;
       // loadingBtn.value = false;
       return null;
     }
@@ -390,6 +405,10 @@ export default defineComponent({
       });
     });
 
+    const formatDate = (date: Date) => {
+      return moment(date).fromNow();
+    };
+
     // function deleteLog(id: ObjectID) {
     //   console.log(id);
     //   teamAdkData.value.practiceLog = teamAdkData.value.practiceLog.filter((item: TableItem) => {
@@ -423,7 +442,10 @@ export default defineComponent({
       requiredMinutes,
       loadingBtn,
       success,
-      error
+      error,
+      formatDate
+      // adkData,
+      // tableRefresh
     };
   }
 });
