@@ -44,7 +44,7 @@
         buffer-value="100"
         stream
       />
-      <v-container class="pa-0">
+      <v-container class="pa-0 mt-3">
         <div class="d-flex flex-column justify-center align-center">
           <div class="d-flex justify-center">
             <validation-provider v-slot="{}" slim rules="numeric|min_value:1|required">
@@ -80,20 +80,26 @@
               :disabled="invalid || userType === 'stakeholder'"
               :loading="loadingBtn"
               @click="logMinutes"
-              >Log Timesheet</v-btn
+              ><v-icon left>mdi-clock-outline</v-icon>Log Timesheet</v-btn
             >
           </div>
           <v-alert
-            :value="success === true"
-            class="mt-3"
-            type="success"
-            dismissible
+            dense
             close-text="Close Alert"
-            >Logged minutes!</v-alert
+            :value="success === true"
+            class="mt-3 font-weight-bold white--text module-default__log-btn2"
+            color="green"
+            >Logged</v-alert
           >
-          <v-alert v-if="error" class="mt-3" type="error" dismissible close-text="Close Alert"
-            >Error Logging minutes!</v-alert
+          <v-alert
+            v-if="error"
+            dense
+            close-text="Close Alert"
+            class="jmt-3 font-weight-bold white--text module-default__log-btn2"
+            color="red"
+            >Try again</v-alert
           >
+
           <div class="d-flex justify-center">
             <v-btn
               v-if="teamAdkData.practiceLog.length > 0"
@@ -176,7 +182,8 @@
                 <v-data-table
                   :headers="header"
                   :items="tableItems"
-                  sort-by="time-stamp"
+                  sort-by="timestamp"
+                  sort-desc
                   :items-per-page="100"
                   :hide-default-footer="true"
                 >
@@ -482,8 +489,8 @@ export default defineComponent({
     }
 
     &.v-text-field--outlined > .v-input__control > .v-input__slot {
-      width: 175px;
-      height: 175px;
+      width: 200px;
+      height: 150px;
       font-family: 'Raleway';
       font-size: 50px;
       font-weight: 700;
@@ -530,7 +537,8 @@ export default defineComponent({
     // font-size: 50px;
   }
   &__log-btn2 {
-    width: 175px;
+    width: 200px;
+    text-align: center;
     &.v-btn:not(.v-btn--round).v-size--default {
       // min-height: 34px;
     }
