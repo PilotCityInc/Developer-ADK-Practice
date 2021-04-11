@@ -52,7 +52,7 @@
                 v-model="minutes"
                 placeholder="0"
                 hide-details
-                label="Enter Minutes"
+                label="Log Minutes"
                 class="module-default__text-field2 mt-12"
                 :readonly="userType === 'stakeholder'"
                 outlined
@@ -80,7 +80,7 @@
               :disabled="invalid || userType === 'stakeholder'"
               :loading="loadingBtn"
               @click="logMinutes"
-              >LOG MINUTES</v-btn
+              >Log Timesheet</v-btn
             >
           </div>
           <v-alert
@@ -108,7 +108,7 @@
           </div>
         </div>
         <div class="pa-0 mt-5">
-          <div class="tableview__total-log mb-6 d-flex justify-center">
+          <div class="font-weight-bold mb-6 d-flex justify-center">
             <div class="tableview__column">
               <div class="tableview__total-log-title mt-6 b-2">Logged Time</div>
               <div class="tableview__total-log mb-3">
@@ -116,9 +116,9 @@
               </div>
               <div class="mb-6 d-flex justify-center">
                 <v-chip-group>
-                  <v-chip color="#f79961" small dark rounded
+                  <!-- <v-chip color="#f79961" small dark rounded
                     >{{ requiredMinutes }} Minutes Required</v-chip
-                  >
+                  > -->
                   <v-chip
                     v-if="requiredMinutes - totalMinutes > 0"
                     color="#f79961"
@@ -135,23 +135,23 @@
                     rounded
                     >Minimum met. Keep logging!</v-chip
                   >
-                  <!-- <v-chip color="#f79961" small outlined rounded
+                  <v-chip color="#f79961" small outlined rounded
                     >{{ requiredMinutes }} Minutes Required</v-chip
-                  >  -->
+                  >
                 </v-chip-group>
               </div>
 
               <v-btn
                 x-small
                 depressed
-                class="mr-1 mb-3"
+                class="mr-1 mb-3 mt-6"
                 :dark="filter === 'Personal' ? true : false"
                 :outlined="filter !== 'Personal' ? true : false"
                 @click="filter = 'Personal'"
                 >Personal</v-btn
               >
               <v-btn
-                class="ml-1 mb-3"
+                class="ml-1 mb-3 mt-6"
                 x-small
                 depressed
                 :dark="filter === 'Team' ? true : false"
@@ -273,7 +273,7 @@ export default defineComponent({
       'inputTeamDoc'
     );
 
-    const minutes = ref('');
+    const minutes = ref('0');
     const requiredMinutes = ref();
     const loadingBtn = ref(false);
     const success = ref(false);
