@@ -52,7 +52,7 @@
                 v-model="minutes"
                 placeholder="0"
                 hide-details
-                label="Log Minutes"
+                label="Timesheet Log"
                 class="module-default__text-field2 mt-12"
                 :readonly="userType === 'stakeholder'"
                 outlined
@@ -73,14 +73,14 @@
             </v-btn> -->
             <v-btn
               x-large
-              outlined
-              class="module-default__log-btn2 mt-5"
+              color="#f79961"
+              class="module-default__log-btn2 mt-5 white--text font-weight-bold"
               depressed
               :ripple="false"
               :disabled="invalid || userType === 'stakeholder'"
               :loading="loadingBtn"
               @click="logMinutes"
-              ><v-icon left>mdi-clock-outline</v-icon>Log Timesheet</v-btn
+              ><v-icon left>mdi-clock-outline</v-icon>Log Minutes</v-btn
             >
           </div>
           <v-alert
