@@ -32,9 +32,13 @@
               >Save</v-btn
             >
           </div>
-          <v-alert v-if="success || error" class="mt-3" :type="success ? 'success' : 'error'">{{
-            message
-          }}</v-alert>
+          <v-alert
+            v-if="success || error"
+            dense
+            class="mt-3 white--text presets__alert"
+            :color="success ? 'green' : 'red'"
+            >{{ message }}</v-alert
+          >
         </validation-provider>
         <!-- </div>
         </v-container> -->
@@ -207,7 +211,7 @@ export default defineComponent({
       // teamDocument,
       // adkData,
       ...toRefs(presets),
-      ...loading(save, 'Saved Successfully', 'Could not save at this time'),
+      ...loading(save, 'Success', 'Try again later'),
       index,
       programDoc,
       save,

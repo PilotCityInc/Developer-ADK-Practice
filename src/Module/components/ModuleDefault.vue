@@ -97,7 +97,7 @@
             close-text="Close Alert"
             class="jmt-3 font-weight-bold white--text module-default__log-btn2"
             color="red"
-            >Try again</v-alert
+            >Try again later</v-alert
           >
 
           <div class="d-flex justify-center">
